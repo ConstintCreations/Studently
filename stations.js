@@ -20,6 +20,8 @@ const dropdowns = document.querySelectorAll(".custom-dropdown");
 const addStationTitle = document.querySelector(".add-station-title");
 
 let editingStation = null;
+let selectedStation = null;
+let stations = {};
 
 dropdowns.forEach(dropdown => {
     const selected = dropdown.querySelector(".dropdown-selected");
@@ -67,12 +69,20 @@ newStationButton.addEventListener("click", () => {
 });
 
 addStationAddButton.addEventListener("click", () => {
-    addStation(addStationNameInput.value || "New Station");
+    const stationName = addStationNameInput.value || "New Station";
+    const mainModule = addStationMainModuleDropdown.querySelector(".dropdown-selected").dataset.value;
+    const secondaryModules = Array.from(addStationSecondaryModulesDropdown.querySelectorAll(".dropdown-options input:checked")).map(input => input.value);
+    addStation(stationName, mainModule, secondaryModules);
     resetAddStationModal();
 });
 
 addStationEditButton.addEventListener("click", () => {
-    editingStation.querySelector('.station-name').value = addStationNameInput.value || "New Station";
+    const newName = addStationNameInput.value || "New Station";
+    const stationID = editingStation.id;
+    editingStation.querySelector('.station-name').textContent = newName;
+    stations[stationID].name = newName;
+    stations[stationID].mainModule = addStationMainModuleDropdown.querySelector(".dropdown-selected").dataset.value;
+    stations[stationID].secondaryModules = Array.from(addStationSecondaryModulesDropdown.querySelectorAll(".dropdown-options input:checked")).map(input => input.value);
     resetAddStationModal();
 });
 
@@ -101,14 +111,14 @@ function resetAddStationModal() {
     editingStation = null;
 }
 
-function addStation(name = "New Station") {
+function addStation(name = "New Station", mainModule, secondaryModules, select = false) {
     const newStationID = stationsModal.querySelectorAll(".station-button").length;
     const button = document.createElement("button");
     button.classList.add("station-button");
     button.setAttribute("id", newStationID);
 
     button.innerHTML = `
-        <input name="station-name" type="text" class="station-name" value="${name}" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" disabled>
+        <p class="station-name">${name}</p>
         <div class="inner-station-button-group">
             <i class="fa-solid fa-pen-to-square edit-station inner-station-button"></i>
             <i class="fa-solid fa-trash-can remove-station inner-station-button"></i>
@@ -119,7 +129,11 @@ function addStation(name = "New Station") {
     addRemoveFunctionality(button);
     addStationClickFunctionality(button);
 
+    stations[newStationID] = {name, mainModule, secondaryModules};
     stationsBody.insertBefore(button, stationsBody.querySelector(".station-bottom-buttons"));
+    if (select) {
+        selectStation(button);
+    };
 }
 
 function addEditFunctionality(stationButton) {
@@ -128,7 +142,7 @@ function addEditFunctionality(stationButton) {
         addStationTitle.innerHTML = `<ion-icon name="albums" class="stations-icon"></ion-icon> Edit Station`;
         addStationAddButton.style.display = "none";
         addStationEditButton.style.display = "block";
-        addStationNameInput.value = stationButton.querySelector('.station-name').value;
+        addStationNameInput.value = stationButton.querySelector('.station-name').textContent;
         editingStation = stationButton;
         
         addStationModal.style.display = "block";
@@ -141,35 +155,39 @@ function addRemoveFunctionality(stationButton) {
         const stationCount = stationsModal.querySelectorAll('.station-button').length;
         if (stationCount > 1) {
             stationButton.remove();
+            delete stations[stationButton.id];
         } else {
-            console.log("Cannot Delete: Must have at least one station.");
+            resetStations();
         }
     });
 }
 
-function addStationClickFunctionality(button) {
-    button.addEventListener("click", (e) => {
-        if (e.target.closest('.inner-station-button')) return;
-        const stationButton = e.currentTarget;
-        console.log(stationButton.querySelector('.station-name').value);
+function addStationClickFunctionality(stationButton) {
+    stationButton.addEventListener("click", (e) => {
+        selectStation(stationButton);
     });
 }
 
+function selectStation(stationButton) {
+    selectedStation = stationButton;
+    document.querySelectorAll('.station-button').forEach(btn => btn.classList.remove('selected'));
+    stationButton.classList.add('selected');
+}
+
 resetStationsButton.addEventListener("click", () => {
+    resetStations();
+});
+
+function resetStations() {
     const buttons = stationsModal.querySelectorAll(".station-button");
+    stations = {};
     buttons.forEach((button) => {
         button.remove();
     });
-    addStation("Default");
-});
+    addStation("Default", "bell-timer", [], true);
+}
 
-// Initialize station (for now)
-const existingStations = stationsModal.querySelectorAll('.station-button');
-existingStations.forEach(station => {
-    addEditFunctionality(station);
-    addRemoveFunctionality(station);
-    addStationClickFunctionality(station);
-});
+addStation("Default", "bell-timer", [], true);
 
 // To do: 
 // Save/load stations to/from local storage
