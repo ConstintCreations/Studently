@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="script.js" defer></script>
+    <script src="settings.js" defer></script>
+    <script src="stations.js" defer></script>
+    <script src="bell-timer.js" defer></script>
+    <script src="pickr.js" defer></script>
+    <title>Studently</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/da7fda860c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="settings-modal">
+        <div class="modal-background">
+            <div class="modal-content">
+                <i class="fa-solid fa-xmark settings-close-modal close-modal"></i>
+                <div class="modal-title">
+                    <i class="fa-solid fa-gear"></i> Settings
+                </div>
+                <div class="modal-body">
+
+                    <div class="setting-section">
+                        <p class="setting-title"><i class="fa-solid fa-palette setting-icon"></i>Theme</p>
+                        <div class="setting-item">
+                            <p class="setting-key primary-color-setting">
+                                Primary Color:
+                            </p>
+                            <div class="color-picker-primary"></div>
+                        </div>
+                        <div class="setting-item">
+                            <p class="setting-key secondary-color-setting">
+                                Secondary Color:
+                            </p>
+                            <div class="color-picker-secondary"></div>
+                        </div>
+                        <div class="setting-item">
+                            <p class="setting-key text-color-setting">
+                                Text Color:
+                            </p>
+                            <div class="color-picker-text"></div>
+                        </div>
+                        <div class="setting-item">
+                            <p class="setting-key shadow-color-setting">
+                                Shadow Color:
+                            </p>
+                            <div class="color-picker-shadow"></div>
+                        </div>
+                        <button class="reset-button reset-theme-button"></button>
+                    </div>
+                    <!-- Setting Section Template
+
+                    <div class="setting-section">
+                        <p class="setting-title"><i class="fa-solid fa-palette setting-icon"></i>Template</p>
+                        <div class="setting-item">
+                            <p class="setting-key">
+                                Setting Key:
+                            </p>
+                            <div class="setting-value">Test</div>
+                        </div>
+                        <button class="reset-button"></button>
+                    </div>
+
+                    -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="stations-modal">
+        <div class="modal-background">
+            <div class="modal-content">
+                <i class="fa-solid fa-xmark stations-close-modal close-modal"></i>
+                <div class="modal-title">
+                    <ion-icon name="albums" class="stations-icon"></ion-icon> Stations
+                </div>
+                <div class="modal-body stations-body">
+                    <button class="station-button" id="0">
+                        <input name="station-name" type="text" class="station-name" value="Default" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" disabled>
+                        <div class="inner-station-button-group">
+                            <i class="fa-solid fa-pen-to-square edit-station inner-station-button"></i>
+                            <i class="fa-solid fa-trash-can remove-station inner-station-button"></i>
+                        </div>
+                    </button>
+                    
+                    <div class="station-bottom-buttons">
+                        <button class="new-station-button">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <button class="reset-stations-button reset-button"></button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="add-station-modal">
+        <div class="modal-background">
+            <div class="add-station-modal-content">
+                <i class="fa-solid fa-xmark close-modal add-station-close-modal"></i>
+                <div class="modal-title add-station-title">
+                    <ion-icon name="albums" class="stations-icon"></ion-icon> Add Station
+                </div>
+                <div class="add-station-body">
+
+                    <div class="add-station-item">
+                        <p class="add-station-key">
+                            Name:
+                        </p>
+                        <input name="add-station-name" type="text" class="add-station-name" value="New Station" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">
+                    </div>
+
+                    <div class="add-station-item">
+                        <p class="add-station-key">
+                            Main Module:
+                        </p>
+
+                        <div class="custom-dropdown add-station-main-module-dropdown">
+                            <div class="dropdown-selected main-module-selected" data-value="bell-timer" style="z-index: 35;">Bell Timer</div>
+                            <div class="dropdown-options" style="z-index: 30;">
+                                <div class="dropdown-option" data-value="bell-schedule">Bell Schedule</div>
+                                <div class="dropdown-option selected" data-value="bell-timer">Bell Timer</div>
+                                <div class="dropdown-option" data-value="weather">Weather</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="add-station-item">
+                        <p class="add-station-key">
+                            Secondary Modules:
+                        </p>
+
+                        <div class="custom-dropdown add-station-secondary-modules-dropdown">
+                            <div class="dropdown-selected" style="z-index: 25;">Select Modules</div>
+                            <div class="dropdown-options add-station-secondary-modules-dropdown-options" style="z-index: 20;">
+                                <input type="checkbox" id="bell-schedule" value="bell-schedule">
+                                <label for="bell-schedule">Bell Schedule</label>
+
+                                <input type="checkbox" id="bell-timer" value="bell-timer">
+                                <label for="bell-timer">Bell Timer</label>
+
+                                <input type="checkbox" id="weather" value="weather">
+                                <label for="weather">Weather</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="add-station-button-group">
+                        <button class="add-station-add-button fancy-button">Add Station</button>
+                        <button class="add-station-edit-button fancy-button">Edit Station</button>
+                        <button class="add-station-cancel-button fancy-button">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="settings">
+        <i class="fa-solid fa-gear"></i>
+    </div>
+    <div class="stations">
+        <ion-icon name="albums" class="stations-icon"></ion-icon>
+    </div>
+
+    <div class="main">
+        <div class="bell-timer widget">
+            <i class="fa-solid fa-bell bell-icon"></i>
+            <p class="timer-text no-select">
+                
+            </p>
+            <p class="timer-subtext no-select">
+                
+            </p>
+        </div>
+    </div>
+</body>
+</html>
