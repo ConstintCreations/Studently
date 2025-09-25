@@ -446,7 +446,8 @@ input[type="color"]::-webkit-color-swatch {
     border-radius: 0px 0px 10px 10px;
     border: 2px solid var(--text-color);
     box-shadow: var(--shadow-color) 0px 4px 6px -2px, #00000033 0px 2px 4px -2px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: none;
     max-height: 165px;
 }
@@ -554,4 +555,29 @@ input[type="color"]::-webkit-color-swatch {
 
 .station-button:not(.selected):hover {
     background-color: var(--primary-color);
+}
+
+.secondary {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    grid-gap: 50px;
+    padding: 20px 0px;
+    position: absolute;
+    top: calc(var(--main-height) + 50px);
+}
+
+.module {
+    background-color: var(--primary-color);
+    border: 2px solid var(--text-color);
+    height: calc(100svh - var(--main-height) - 100px);
+    aspect-ratio: 1;
+    border-radius: 80px;
+    display: grid;
+    place-items: center;
+}
+
+.secondary.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, calc(100svh - var(--main-height) - 100px));
 }

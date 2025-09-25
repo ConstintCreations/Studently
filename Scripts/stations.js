@@ -19,6 +19,7 @@ const dropdowns = document.querySelectorAll(".custom-dropdown");
 
 const addStationTitle = document.querySelector(".add-station-title");
 
+
 let editingStation = null;
 let selectedStation = null;
 let stations = {};
@@ -72,7 +73,7 @@ addStationAddButton.addEventListener("click", () => {
     const stationName = addStationNameInput.value || "New Station";
     const mainModule = addStationMainModuleDropdown.querySelector(".dropdown-selected").dataset.value;
     const secondaryModules = Array.from(addStationSecondaryModulesDropdown.querySelectorAll(".dropdown-options input:checked")).map(input => input.value);
-    addStation(stationName, mainModule, secondaryModules);
+    addStation(stationName, mainModule, secondaryModules, true);
     resetAddStationModal();
 });
 
@@ -84,6 +85,7 @@ addStationEditButton.addEventListener("click", () => {
     stations[stationID].mainModule = addStationMainModuleDropdown.querySelector(".dropdown-selected").dataset.value;
     stations[stationID].secondaryModules = Array.from(addStationSecondaryModulesDropdown.querySelectorAll(".dropdown-options input:checked")).map(input => input.value);
     resetAddStationModal();
+    updateStationDisplay();
 });
 
 addStationCancelButton.addEventListener("click", () => {
@@ -142,9 +144,30 @@ function addEditFunctionality(stationButton) {
         addStationTitle.innerHTML = `<ion-icon name="albums" class="stations-icon"></ion-icon> Edit Station`;
         addStationAddButton.style.display = "none";
         addStationEditButton.style.display = "block";
-        addStationNameInput.value = stationButton.querySelector('.station-name').textContent;
+        
+        addStationNameInput.value = stations[stationButton.id].name;
+
+        const selectedMain = addStationMainModuleDropdown.querySelector(".dropdown-selected");
+        const optionsMain = addStationMainModuleDropdown.querySelector(".dropdown-options");
+        
+        optionsMain.querySelectorAll(".dropdown-option").forEach(opt => opt.classList.remove('selected'));
+        const selectedOption =  optionsMain.querySelector(`[data-value="${stations[stationButton.id].mainModule}"]`);
+        selectedMain.dataset.value = stations[stationButton.id].mainModule;
+        selectedOption.classList.add('selected');
+        selectedMain.textContent = selectedOption.textContent;
+        
+        const optionsSecondary = addStationSecondaryModulesDropdown.querySelector(".dropdown-options");
+        
+        optionsSecondary.querySelectorAll("input").forEach(input => {
+            if (stations[stationButton.id].secondaryModules.includes(input.value)) {
+                input.checked = true;
+            }
+        });
+        
+        
         editingStation = stationButton;
         
+        selectStation(stationButton);
         addStationModal.style.display = "block";
     });
 }
@@ -172,6 +195,7 @@ function selectStation(stationButton) {
     selectedStation = stationButton;
     document.querySelectorAll('.station-button').forEach(btn => btn.classList.remove('selected'));
     stationButton.classList.add('selected');
+    updateStationDisplay();
 }
 
 resetStationsButton.addEventListener("click", () => {
@@ -189,5 +213,22 @@ function resetStations() {
 
 addStation("Default", "bell-timer", [], true);
 
-// To do: 
-// Save/load stations to/from local storage
+function updateStationDisplay() {
+    const mainModule = stations[selectedStation.id].mainModule;
+    const secondaryModules = stations[selectedStation.id].secondaryModules;
+    secondary.innerHTML = "";
+    if (secondaryModules.length === 0) {
+        document.documentElement.style.setProperty('--main-height', '85svh');
+    } else {
+        document.documentElement.style.setProperty('--main-height', '50svh');
+        secondaryModules.forEach(module => {
+            secondary.innerHTML += `<div class="module">${module}</div>`;
+        });
+    }
+    
+    adjustSecondaryDisplay();
+
+    // Add Grabbing Logic to Reorder Modules
+}
+
+// Add Local Storage Logic
