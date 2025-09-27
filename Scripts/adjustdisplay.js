@@ -15,4 +15,3 @@ function adjustSecondaryDisplay() {
 adjustSecondaryDisplay();
 
 window.addEventListener('resize', adjustSecondaryDisplay);
-window.adjustSecondaryDisplay = adjustSecondaryDisplay;

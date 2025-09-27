@@ -20,4 +20,27 @@ resetThemeButtonElement.addEventListener("click", () => {
     pickrSecondary.setColor(getComputedStyle(document.documentElement).getPropertyValue("--default-secondary-color").trim(), true);
     pickrText.setColor(getComputedStyle(document.documentElement).getPropertyValue("--default-text-color").trim(), true);
     pickrShadow.setColor(getComputedStyle(document.documentElement).getPropertyValue("--default-shadow-color").trim(), true);
+    theme = {
+        "primaryColor": getComputedStyle(document.documentElement).getPropertyValue("--default-primary-color").trim(),
+        "secondaryColor": getComputedStyle(document.documentElement).getPropertyValue("--default-secondary-color").trim(),
+        "textColor": getComputedStyle(document.documentElement).getPropertyValue("--default-text-color").trim(),
+        "shadowColor": getComputedStyle(document.documentElement).getPropertyValue("--default-shadow-color").trim()
+    };
+    localStorage.setItem("theme", JSON.stringify(theme));
 });
+
+let theme = JSON.parse(localStorage.getItem("theme"));
+if (!theme) {
+    theme = {
+        "primaryColor": getComputedStyle(document.documentElement).getPropertyValue("--default-primary-color").trim(),
+        "secondaryColor": getComputedStyle(document.documentElement).getPropertyValue("--default-secondary-color").trim(),
+        "textColor": getComputedStyle(document.documentElement).getPropertyValue("--default-text-color").trim(),
+        "shadowColor": getComputedStyle(document.documentElement).getPropertyValue("--default-shadow-color").trim()
+    };
+    localStorage.setItem("theme", JSON.stringify(theme));
+} else {
+    document.documentElement.style.setProperty("--primary-color", theme.primaryColor);
+    document.documentElement.style.setProperty("--secondary-color", theme.secondaryColor);
+    document.documentElement.style.setProperty("--text-color", theme.textColor);
+    document.documentElement.style.setProperty("--shadow-color", theme.shadowColor);
+}

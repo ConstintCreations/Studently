@@ -8,7 +8,7 @@ const modules = {
             <p class="timer-subtext no-select">
             
             </p>`,
-        init: async (element) => {
+        init: (element) => {
             
             let interval;
 
@@ -18,14 +18,100 @@ const modules = {
             let calendar = [];
             let bellScheduleTypes = {};
 
-            async function loadDataJSON() {
-                try {
-                    const response = await fetch("data.json");
-                    const data = await response.json();
-                    calendar = data.calendar || [];
-                    bellScheduleTypes = data.bellscheduletypes || {};
-                } catch (error) {
-                    console.error("Error fetching data.json:", error);
+            function loadDataJSON() {
+                const savedCalendar = localStorage.getItem("calendar");
+                if (savedCalendar) {
+                    calendar = JSON.parse(savedCalendar);
+                } else {
+                    localStorage.setItem("calendar", JSON.stringify(calendar));
+                }
+                const savedBellScheduleTypes = localStorage.getItem("bellScheduleTypes");
+                if (savedBellScheduleTypes) {
+                    bellScheduleTypes = JSON.parse(savedBellScheduleTypes);
+                } else {
+                    bellScheduleTypes = {
+                        "regular": {
+                            "name": "Regular Schedule",
+                            "periods": [
+                                {
+                                    "start": "08:00",
+                                    "end": "08:50"
+                                },
+                                {
+                                    "start": "08:55",
+                                    "end": "09:45"
+                                },
+                                {
+                                    "start": "09:50",
+                                    "end": "10:40"
+                                },
+                                {
+                                    "start": "10:45",
+                                    "end": "11:35"
+                                },
+                                {
+                                    "name": "Lunch",
+                                    "start": "11:40",
+                                    "end": "12:15"
+                                },
+                                {
+                                    "start": "12:20",
+                                    "end": "13:10"
+                                },
+                                {
+                                    "start": "13:15",
+                                    "end": "14:05"
+                                },
+                                {
+                                    "start": "14:10",
+                                    "end": "15:00"
+                                }
+                            ]
+                        },
+                        "shortened": {
+                            "name": "Shortened Schedule",
+                            "periods": [
+                                {
+                                    "start": "08:00",
+                                    "end": "08:35"
+                                },
+                                {
+                                    "start": "08:40",
+                                    "end": "09:15"
+                                },
+                                {
+                                    "start": "09:20",
+                                    "end": "09:55"
+                                },
+                                {
+                                    "start": "10:00",
+                                    "end": "10:35"
+                                },
+                                {
+                                    "name": "Lunch",
+                                    "start": "10:40",
+                                    "end": "11:15"
+                                },
+                                {
+                                    "start": "11:20",
+                                    "end": "11:55"
+                                },
+                                {
+                                    "start": "12:00",
+                                    "end": "12:35"
+                                },
+                                {
+                                    "start": "12:40",
+                                    "end": "13:15"
+                                }
+                            ]
+                        },
+                        "no-school": {
+                            "name": "No School",
+                            "periods": []
+                        }
+                    }
+                    localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
                 }
             }
 
@@ -52,10 +138,10 @@ const modules = {
                     candidateDate.setDate(now.getDate() + dayOffset);
                     const dayOfWeek = candidateDate.getDay();
 
-                    /*if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    if (dayOfWeek === 0 || dayOfWeek === 6) {
                         dayOffset++;
                         continue;
-                    }*/
+                    }
 
                     const calendarEntry = getCalendarEntryForDate(candidateDate);
                     if (calendarEntry && !calendarEntry.schedule) {
@@ -132,7 +218,7 @@ const modules = {
                 
             }
             
-            await loadDataJSON();
+            loadDataJSON();
             updateTimer();
             
             interval = setInterval(updateTimer, 1000);
@@ -140,7 +226,6 @@ const modules = {
             element._bell_timer_interval = interval;
         },
         delete: (element) => {
-            console.log("Deleted bell timer " + element + " " + element._bell_timer_interval);
             if (element._bell_timer_interval) {
                 clearInterval(element._bell_timer_interval);
             }
@@ -153,7 +238,7 @@ const modules = {
             <div class="schedule">
                 
             </div>`,
-        init: async (element) => {
+        init: (element) => {
             const typeElement = element.querySelector(".bell-schedule-type");
             const scheduleElement = element.querySelector(".schedule");
 
@@ -165,14 +250,100 @@ const modules = {
             let scheduleType = null;
             let now = new Date();
 
-            async function loadDataJSON() {
-                try {
-                    const response = await fetch("data.json");
-                    const data = await response.json();
-                    calendar = data.calendar || [];
-                    bellScheduleTypes = data.bellscheduletypes || {};
-                } catch (error) {
-                    console.error("Error fetching data.json:", error);
+            function loadDataJSON() {
+                const savedCalendar = localStorage.getItem("calendar");
+                if (savedCalendar) {
+                    calendar = JSON.parse(savedCalendar);
+                } else {
+                    localStorage.setItem("calendar", JSON.stringify(calendar));
+                }
+                const savedBellScheduleTypes = localStorage.getItem("bellScheduleTypes");
+                if (savedBellScheduleTypes) {
+                    bellScheduleTypes = JSON.parse(savedBellScheduleTypes);
+                } else {
+                    bellScheduleTypes = {
+                        "regular": {
+                            "name": "Regular Schedule",
+                            "periods": [
+                                {
+                                    "start": "08:00",
+                                    "end": "08:50"
+                                },
+                                {
+                                    "start": "08:55",
+                                    "end": "09:45"
+                                },
+                                {
+                                    "start": "09:50",
+                                    "end": "10:40"
+                                },
+                                {
+                                    "start": "10:45",
+                                    "end": "11:35"
+                                },
+                                {
+                                    "name": "Lunch",
+                                    "start": "11:40",
+                                    "end": "12:15"
+                                },
+                                {
+                                    "start": "12:20",
+                                    "end": "13:10"
+                                },
+                                {
+                                    "start": "13:15",
+                                    "end": "14:05"
+                                },
+                                {
+                                    "start": "14:10",
+                                    "end": "15:00"
+                                }
+                            ]
+                        },
+                        "shortened": {
+                            "name": "Shortened Schedule",
+                            "periods": [
+                                {
+                                    "start": "08:00",
+                                    "end": "08:35"
+                                },
+                                {
+                                    "start": "08:40",
+                                    "end": "09:15"
+                                },
+                                {
+                                    "start": "09:20",
+                                    "end": "09:55"
+                                },
+                                {
+                                    "start": "10:00",
+                                    "end": "10:35"
+                                },
+                                {
+                                    "name": "Lunch",
+                                    "start": "10:40",
+                                    "end": "11:15"
+                                },
+                                {
+                                    "start": "11:20",
+                                    "end": "11:55"
+                                },
+                                {
+                                    "start": "12:00",
+                                    "end": "12:35"
+                                },
+                                {
+                                    "start": "12:40",
+                                    "end": "13:15"
+                                }
+                            ]
+                        },
+                        "no-school": {
+                            "name": "No School",
+                            "periods": []
+                        }
+                    }
+                    localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
                 }
             }
 
@@ -259,14 +430,13 @@ const modules = {
             }
 
             
-            await loadDataJSON();
+            loadDataJSON();
             updateModule();
             interval = setInterval(updateModule, 1000);
 
             element._bell_schedule_interval = interval;
         },
         delete: (element) => {
-            console.log("Deleted bell schedule " + element + " " + element._bell_schedule_interval);
             if (element._bell_schedule_interval) {
                 clearInterval(element._bell_schedule_interval);
             }
