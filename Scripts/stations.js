@@ -19,6 +19,9 @@ const dropdowns = document.querySelectorAll(".custom-dropdown");
 
 const addStationTitle = document.querySelector(".add-station-title");
 
+const main = document.querySelector(".main");
+let mainModuleObject = null;
+
 
 let editingStation = null;
 let selectedStation = null;
@@ -213,10 +216,15 @@ function resetStations() {
 
 addStation("Default", "bell-timer", [], true);
 
-function updateStationDisplay() {
+async function updateStationDisplay() {
     const mainModule = stations[selectedStation.id].mainModule;
     const secondaryModules = stations[selectedStation.id].secondaryModules;
     secondary.innerHTML = "";
+    if (mainModuleObject) {
+        mainModuleObject.delete(main);
+    }
+    main.innerHTML = "";
+    mainModuleObject = null;
     if (secondaryModules.length === 0) {
         document.documentElement.style.setProperty('--main-height', '85svh');
     } else {
@@ -225,6 +233,10 @@ function updateStationDisplay() {
             secondary.innerHTML += `<div class="module">${module}</div>`;
         });
     }
+
+    mainModuleObject = modules["main"][mainModule];
+    main.innerHTML = mainModuleObject.render();
+    await mainModuleObject.init(main);
     
     adjustSecondaryDisplay();
 

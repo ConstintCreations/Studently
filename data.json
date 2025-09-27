@@ -1,73 +1,83 @@
 {
   "bellscheduletypes": {
-    "regular": [
-      {
-        "start": "08:30",
-        "end": "09:21"
-      },
-      {
-        "start": "09:26",
-        "end": "10:13"
-      },
-      {
-        "start": "10:18",
-        "end": "11:05"
-      },
-      {
-        "start": "11:10",
-        "end": "11:57"
-      },
-      {
-        "start": "12:02",
-        "end": "12:49"
-      },
-      {
-        "start": "12:54",
-        "end": "13:41"
-      },
-      {
-        "start": "13:46",
-        "end": "14:33"
-      },
-      {
-        "start": "14:38",
-        "end": "15:25"
-      }
-    ],
-    "shortened": [
-      {
-        "start": "10:30",
-        "end": "11:05"
-      },
-      {
-        "start": "11:10",
-        "end": "11:40"
-      },
-      {
-        "start": "11:45",
-        "end": "12:15"
-      },
-      {
-        "start": "12:20",
-        "end": "12:55"
-      },
-      {
-        "start": "13:00",
-        "end": "13:35"
-      },
-      {
-        "start": "13:40",
-        "end": "14:15"
-      },
-      {
-        "start": "14:20",
-        "end": "14:50"
-      },
-      {
-        "start": "14:55",
-        "end": "15:25"
-      }
-    ]
+    "regular": {
+      "name": "Regular Schedule",
+      "periods": [
+        {
+          "start": "08:30",
+          "end": "09:21"
+        },
+        {
+          "start": "09:26",
+          "end": "10:13"
+        },
+        {
+          "start": "10:18",
+          "end": "11:05"
+        },
+        {
+          "start": "11:10",
+          "end": "11:57"
+        },
+        {
+          "start": "12:02",
+          "end": "12:49"
+        },
+        {
+          "start": "12:54",
+          "end": "13:41"
+        },
+        {
+          "start": "13:46",
+          "end": "14:33"
+        },
+        {
+          "start": "14:38",
+          "end": "15:25"
+        }
+      ]
+    },
+    "shortened": {
+      "name": "Shortened Schedule",
+      "periods": [
+        {
+          "start": "10:30",
+          "end": "11:05"
+        },
+        {
+          "start": "11:10",
+          "end": "11:40"
+        },
+        {
+          "start": "11:45",
+          "end": "12:15"
+        },
+        {
+          "start": "12:20",
+          "end": "12:55"
+        },
+        {
+          "start": "13:00",
+          "end": "13:35"
+        },
+        {
+          "start": "13:40",
+          "end": "14:15"
+        },
+        {
+          "start": "14:20",
+          "end": "14:50"
+        },
+        {
+          "start": "14:55",
+          "end": "15:25"
+        }
+      ]
+    },
+    "no-school": {
+      "name": "No School",
+      "periods": []
+    }
   },
   "calendar": [
     {
@@ -92,25 +102,6 @@
     }
   },
   "stations": {
-    "Default": {
-      "modules": [
-        "Bell Timer",
-        "Bell Schedule",
-        "Calendar"
-      ],
-      "settings": {
-        "Bell Timer": {
-          "showSubtext": true,
-          "dateSubtext": false,
-          "pastAndFutureBells": false
-        },
-        "Bell Schedule": {
-          "showSubtext": false,
-          "dateSubtext": false,
-          "pastAndFutureBells": false
-        },
-        "Calendar": {}
-      }
-    }
+    
   }
 }

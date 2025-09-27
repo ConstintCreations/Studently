@@ -49,39 +49,6 @@ body {
     box-shadow: var(--shadow-color) 0px 50px 100px -20px, #0000004d 0px 30px 60px -30px;
 }
 
-.bell-timer {
-    height: 80%;
-    aspect-ratio: 1;
-    background-color: var(--secondary-color);
-    border-radius: 50%;
-    box-shadow: var(--shadow-color) 0px 50px 100px -20px, #0000004d 0px 30px 60px -30px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    font-size: calc(.16 * var(--main-height));
-    text-align: center;
-}
-
-.timer-text {
-    position: absolute;
-    font-size: 1em;
-    margin: 0px;
-}
-
-.timer-subtext {
-    font-size: 0.4em;
-    position: absolute;
-    margin-top: 6em;
-}
-
-.bell-icon {
-    font-size: 1.2em;
-    position: absolute;
-    margin-bottom: 2em;
-}
-
 .settings, .stations {
     position: absolute;
     top: 30px;
@@ -567,6 +534,23 @@ input[type="color"]::-webkit-color-swatch {
     top: calc(var(--main-height) + 50px);
 }
 
+.secondary.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, calc(100svh - var(--main-height) - 100px));
+}
+
+.main-module {
+    height: 80%;
+    aspect-ratio: 1;
+    border-radius: 20%;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--secondary-color);
+    box-shadow: var(--shadow-color) 0px 50px 100px -20px, #0000004d 0px 30px 60px -30px;
+    font-size: calc(.16 * var(--main-height));
+    overflow: hidden;
+}
+
 .module {
     background-color: var(--primary-color);
     border: 2px solid var(--text-color);
@@ -575,9 +559,4 @@ input[type="color"]::-webkit-color-swatch {
     border-radius: 80px;
     display: grid;
     place-items: center;
-}
-
-.secondary.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, calc(100svh - var(--main-height) - 100px));
 }

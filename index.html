@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <script src="script.js" defer></script>
+    <script src="Scripts/adjustdisplay.js" defer></script>
     <script src="Scripts/settings.js" defer></script>
+    <script src="Scripts/modules.js" defer></script>
     <script src="Scripts/stations.js" defer></script>
-    <script src="Scripts/bell-timer.js" defer></script>
     <script src="Scripts/pickr.js" defer></script>
     <title>Studently</title>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -14,6 +15,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Styles/mainmodules.css">
+    <link rel="stylesheet" href="Styles/secondarymodules.css">
 </head>
 <body>
     <div class="settings-modal">
@@ -52,6 +55,14 @@
                             <div class="color-picker-shadow"></div>
                         </div>
                         <button class="reset-button reset-theme-button"></button>
+                    </div>
+                    
+                    <div class="setting-section">
+                        <p class="setting-title"><i class="fa-solid fa-bell setting-icon"></i>Bell Schedule</p>
+                        <div class="setting-item">
+                            
+                        </div>
+                        <button class="reset-button"></button>
                     </div>
                     <!-- Setting Section Template
 
@@ -160,15 +171,7 @@
     </div>
 
     <div class="main">
-        <div class="bell-timer main-module">
-            <i class="fa-solid fa-bell bell-icon"></i>
-            <p class="timer-text no-select">
-                
-            </p>
-            <p class="timer-subtext no-select">
-                
-            </p>
-        </div>
+        
     </div>
     <div class="secondary">
     </div>

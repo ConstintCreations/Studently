@@ -1,0 +1,32 @@
+.bell-timer.module {
+    height: 80%;
+    aspect-ratio: 1;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    box-shadow: var(--shadow-color) 0px 50px 100px -20px, #0000004d 0px 30px 60px -30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    font-size: calc(.16 * var(--main-height));
+    text-align: center;
+}
+
+.bell-timer.module .timer-text {
+    position: absolute;
+    font-size: 1em;
+    margin: 0px;
+}
+
+.bell-timer.module .timer-subtext {
+    font-size: 0.4em;
+    position: absolute;
+    margin-top: 6em;
+}
+
+.bell-timer.module .bell-icon {
+    font-size: 1.2em;
+    position: absolute;
+    margin-bottom: 2em;
+}

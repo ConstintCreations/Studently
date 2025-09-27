@@ -1,0 +1,75 @@
+.bell-timer.main-module {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bell-timer.main-module .timer-text {
+    position: absolute;
+    font-size: 1em;
+    margin: 0px;
+}
+
+.bell-timer.main-module .timer-subtext {
+    font-size: 0.4em;
+    position: absolute;
+    margin-top: 6em;
+}
+
+.bell-timer.main-module .bell-icon {
+    font-size: 1.2em;
+    position: absolute;
+    margin-bottom: 2em;
+}
+
+.bell-schedule.main-module {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    padding-top: .2em;
+    padding-bottom: 0px;
+    gap: 0em;
+    overflow: hidden;
+}
+
+.bell-schedule.main-module .bell-schedule-title {
+    font-size: .5em;
+}
+
+.bell-schedule.main-module .bell-schedule-type {
+    font-size: .2em;
+    margin-top: 1em;
+
+}
+
+.bell-schedule.main-module .schedule {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 80%;
+    border-radius: 1em;
+    padding: .5em;
+    text-align: left;
+    font-size: .3em;
+    margin-bottom: .2em;
+    background-color: var(--secondary-color);
+}
+
+.bell-schedule.main-module .schedule-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: .5em;
+    border: 2px solid var(--text-color);
+    border-radius: 50px;
+    font-size: .6em;
+    padding: .8em;
+    cursor: pointer;
+}
+
+.bell-schedule.main-module .schedule-item.current {
+    background-color: var(--primary-color);
+}
