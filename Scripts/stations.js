@@ -22,6 +22,8 @@ const addStationTitle = document.querySelector(".add-station-title");
 const main = document.querySelector(".main");
 let mainModuleObject = null;
 
+let secondaryModuleObjects = [];
+
 
 let editingStation = null;
 let selectedStation = null;
@@ -239,25 +241,42 @@ function resetStations() {
 async function updateStationDisplay() {
     const mainModule = stations[selectedStation.dataset.id].mainModule;
     const secondaryModules = stations[selectedStation.dataset.id].secondaryModules;
-    secondary.innerHTML = "";
     if (mainModuleObject) {
         mainModuleObject.delete(main);
     }
     main.innerHTML = "";
     mainModuleObject = null;
+    if (secondaryModuleObjects.length > 0) {
+        secondaryModuleObjects.forEach(module => {
+            module.delete(secondary);
+        });
+    }
+    secondary.innerHTML = "";
+    secondaryModuleObjects = [];
     if (secondaryModules.length === 0) {
         document.documentElement.style.setProperty('--main-height', '85svh');
     } else {
         document.documentElement.style.setProperty('--main-height', '50svh');
-        secondaryModules.forEach(module => {
-            secondary.innerHTML += `<div class="module">${module}</div>`;
+        secondaryModules.forEach(async module => {
+            const secondaryModuleObject = modules[module];
+            const secondaryModuleElement = document.createElement("div");
+            secondaryModuleElement.classList.add("module");
+            secondaryModuleElement.classList.add(module);
+            secondary.appendChild(secondaryModuleElement);
+            secondaryModuleElement.innerHTML = secondaryModuleObject.render();
+            await secondaryModuleObject.init(secondaryModuleElement);
+            secondaryModuleObjects.push(secondaryModuleObject);
         });
     }
 
     mainModuleObject = modules[mainModule];
-    main.innerHTML = mainModuleObject.render();
-    await mainModuleObject.init(main);
-    
+    const mainModuleElement = document.createElement("div");
+    mainModuleElement.classList.add("main-module");
+    mainModuleElement.classList.add(mainModule);
+    main.appendChild(mainModuleElement);
+    mainModuleElement.innerHTML = mainModuleObject.render();
+    await mainModuleObject.init(mainModuleElement);
+
     adjustSecondaryDisplay();
 
     // Add Grabbing Logic to Reorder Modules

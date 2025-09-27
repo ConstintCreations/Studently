@@ -1,15 +1,13 @@
 const modules = {
     "bell-timer": {
         render: () =>   
-            `<div class="bell-timer main-module">
-                <i class="fa-solid fa-bell bell-icon"></i>
-                <p class="timer-text no-select">
+            `<i class="fa-solid fa-bell bell-icon"></i>
+            <p class="timer-text no-select">
 
-                </p>
-                <p class="timer-subtext no-select">
-                
-                </p>
-            </div>`,
+            </p>
+            <p class="timer-subtext no-select">
+            
+            </p>`,
         init: async (element) => {
             
             let interval;
@@ -54,10 +52,10 @@ const modules = {
                     candidateDate.setDate(now.getDate() + dayOffset);
                     const dayOfWeek = candidateDate.getDay();
 
-                    if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    /*if (dayOfWeek === 0 || dayOfWeek === 6) {
                         dayOffset++;
                         continue;
-                    }
+                    }*/
 
                     const calendarEntry = getCalendarEntryForDate(candidateDate);
                     if (calendarEntry && !calendarEntry.schedule) {
@@ -139,22 +137,21 @@ const modules = {
             
             interval = setInterval(updateTimer, 1000);
 
-            element._interval = interval;
+            element._bell_timer_interval = interval;
         },
         delete: (element) => {
-            if (element._interval) {
-                clearInterval(element._interval);
+            console.log("Deleted bell timer " + element + " " + element._bell_timer_interval);
+            if (element._bell_timer_interval) {
+                clearInterval(element._bell_timer_interval);
             }
         },
     },
     "bell-schedule": {
         render: () => 
-            `<div class="main-module bell-schedule">
-                <div class="bell-schedule-title"><i class="fa-solid fa-bell bell-icon"></i>Schedule</div>
-                <div class="bell-schedule-type">No Schedule</div>
-                <div class="schedule">
-                    
-                </div>
+            `<div class="bell-schedule-title"><i class="fa-solid fa-bell bell-icon"></i>Schedule</div>
+            <div class="bell-schedule-type">No Schedule</div>
+            <div class="schedule">
+                
             </div>`,
         init: async (element) => {
             const typeElement = element.querySelector(".bell-schedule-type");
@@ -266,12 +263,19 @@ const modules = {
             updateModule();
             interval = setInterval(updateModule, 1000);
 
-            element._interval = interval;
+            element._bell_schedule_interval = interval;
         },
         delete: (element) => {
-            if (element._interval) {
-                clearInterval(element._interval);
+            console.log("Deleted bell schedule " + element + " " + element._bell_schedule_interval);
+            if (element._bell_schedule_interval) {
+                clearInterval(element._bell_schedule_interval);
             }
         }
+    },
+    "weather": {
+        render: () =>
+            `weather`,
+        init: async (element) => {},
+        delete: (element) => {},
     }
 };
