@@ -27,6 +27,21 @@ let editingStation = null;
 let selectedStation = null;
 let stations = {};
 
+function saveStations() {
+    localStorage.setItem("stations", JSON.stringify(stations));
+}
+
+function loadStations() {
+    const savedStations = localStorage.getItem("stations");
+    if (savedStations) {
+        stations = JSON.parse(savedStations);
+    }
+}
+
+function generateID() {
+    return 'station-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+}
+
 dropdowns.forEach(dropdown => {
     const selected = dropdown.querySelector(".dropdown-selected");
     const options = dropdown.querySelector(".dropdown-options");
@@ -82,11 +97,12 @@ addStationAddButton.addEventListener("click", () => {
 
 addStationEditButton.addEventListener("click", () => {
     const newName = addStationNameInput.value || "New Station";
-    const stationID = editingStation.id;
+    const stationID = editingStation.dataset.id;
     editingStation.querySelector('.station-name').textContent = newName;
     stations[stationID].name = newName;
     stations[stationID].mainModule = addStationMainModuleDropdown.querySelector(".dropdown-selected").dataset.value;
     stations[stationID].secondaryModules = Array.from(addStationSecondaryModulesDropdown.querySelectorAll(".dropdown-options input:checked")).map(input => input.value);
+    saveStations();
     resetAddStationModal();
     updateStationDisplay();
 });
@@ -116,11 +132,11 @@ function resetAddStationModal() {
     editingStation = null;
 }
 
-function addStation(name = "New Station", mainModule, secondaryModules, select = false) {
-    const newStationID = stationsModal.querySelectorAll(".station-button").length;
+function addStation(name = "New Station", mainModule, secondaryModules, select = false, id = null) {
+    const newStationID = id || generateID();
     const button = document.createElement("button");
     button.classList.add("station-button");
-    button.setAttribute("id", newStationID);
+    button.dataset.id = newStationID;
 
     button.innerHTML = `
         <p class="station-name">${name}</p>
@@ -136,6 +152,7 @@ function addStation(name = "New Station", mainModule, secondaryModules, select =
 
     stations[newStationID] = {name, mainModule, secondaryModules};
     stationsBody.insertBefore(button, stationsBody.querySelector(".station-bottom-buttons"));
+    saveStations();
     if (select) {
         selectStation(button);
     };
@@ -147,26 +164,25 @@ function addEditFunctionality(stationButton) {
         addStationTitle.innerHTML = `<ion-icon name="albums" class="stations-icon"></ion-icon> Edit Station`;
         addStationAddButton.style.display = "none";
         addStationEditButton.style.display = "block";
-        
-        addStationNameInput.value = stations[stationButton.id].name;
+
+        addStationNameInput.value = stations[stationButton.dataset.id].name;
 
         const selectedMain = addStationMainModuleDropdown.querySelector(".dropdown-selected");
         const optionsMain = addStationMainModuleDropdown.querySelector(".dropdown-options");
         
         optionsMain.querySelectorAll(".dropdown-option").forEach(opt => opt.classList.remove('selected'));
-        const selectedOption =  optionsMain.querySelector(`[data-value="${stations[stationButton.id].mainModule}"]`);
-        selectedMain.dataset.value = stations[stationButton.id].mainModule;
+        const selectedOption =  optionsMain.querySelector(`[data-value="${stations[stationButton.dataset.id].mainModule}"]`);
+        selectedMain.dataset.value = stations[stationButton.dataset.id].mainModule;
         selectedOption.classList.add('selected');
         selectedMain.textContent = selectedOption.textContent;
         
         const optionsSecondary = addStationSecondaryModulesDropdown.querySelector(".dropdown-options");
         
         optionsSecondary.querySelectorAll("input").forEach(input => {
-            if (stations[stationButton.id].secondaryModules.includes(input.value)) {
+            if (stations[stationButton.dataset.id].secondaryModules.includes(input.value)) {
                 input.checked = true;
             }
         });
-        
         
         editingStation = stationButton;
         
@@ -178,10 +194,16 @@ function addEditFunctionality(stationButton) {
 function addRemoveFunctionality(stationButton) {
     const removeBtn = stationButton.querySelector('.remove-station');
     removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const stationCount = stationsModal.querySelectorAll('.station-button').length;
         if (stationCount > 1) {
+            if (selectedStation === stationButton) {
+                const newSelectedStation = stationButton.previousElementSibling || stationButton.nextElementSibling;
+                selectStation(newSelectedStation);
+            }
+            delete stations[stationButton.dataset.id];
             stationButton.remove();
-            delete stations[stationButton.id];
+            saveStations();
         } else {
             resetStations();
         }
@@ -214,11 +236,9 @@ function resetStations() {
     addStation("Default", "bell-timer", [], true);
 }
 
-addStation("Default", "bell-timer", [], true);
-
 async function updateStationDisplay() {
-    const mainModule = stations[selectedStation.id].mainModule;
-    const secondaryModules = stations[selectedStation.id].secondaryModules;
+    const mainModule = stations[selectedStation.dataset.id].mainModule;
+    const secondaryModules = stations[selectedStation.dataset.id].secondaryModules;
     secondary.innerHTML = "";
     if (mainModuleObject) {
         mainModuleObject.delete(main);
@@ -234,7 +254,7 @@ async function updateStationDisplay() {
         });
     }
 
-    mainModuleObject = modules["main"][mainModule];
+    mainModuleObject = modules[mainModule];
     main.innerHTML = mainModuleObject.render();
     await mainModuleObject.init(main);
     
@@ -243,4 +263,20 @@ async function updateStationDisplay() {
     // Add Grabbing Logic to Reorder Modules
 }
 
-// Add Local Storage Logic
+function initializeStations() {
+    loadStations();
+    const stationIDs = Object.keys(stations);
+    if (stationIDs.length === 0) {
+        addStation("Default", "bell-timer", [], true);
+    } else {
+        stationIDs.forEach((id) => {
+            if (stationIDs[0] === id) {
+                addStation(stations[id].name, stations[id].mainModule, stations[id].secondaryModules, true, id);
+                return;
+            }
+            addStation(stations[id].name, stations[id].mainModule, stations[id].secondaryModules, false, id);
+        });
+    }
+}
+
+initializeStations();
