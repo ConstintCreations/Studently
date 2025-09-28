@@ -45,6 +45,8 @@ if (!theme) {
     document.documentElement.style.setProperty("--shadow-color", theme.shadowColor);
 }
 
+let calendar = [];
+
 
 
 const bellScheduleBody = document.querySelector(".bell-schedule-body");
@@ -69,6 +71,7 @@ let bellScheduleTypes;
 function saveBellSchedules() {
     localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
     updateStationDisplay();
+    updateCalendarAfterBellScheduleChange();
 }
 
 function loadBellSchedules() {
@@ -336,7 +339,6 @@ const editEventsCancelButton = document.querySelector(".edit-events-cancel-butto
 const editEventsDeleteButtonElement = document.querySelector(".edit-events-delete-button");
 const eventsBody = document.querySelector(".events");
 
-let calendar = [];
 let calendarEvents = {};
 
 function saveCalendar() {
@@ -504,5 +506,15 @@ addEventButton.addEventListener("click", () => {
 
 function resetCalendar() {
     calendar = [];
+    saveCalendar();
+}
+
+function updateCalendarAfterBellScheduleChange() {
+    loadCalendar();
+    calendar.forEach((event) => {
+        if (event.schedule && !bellScheduleTypes[event.schedule]) {
+            event.schedule = 'regular';
+        }
+    });
     saveCalendar();
 }

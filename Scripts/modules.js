@@ -138,53 +138,22 @@ const modules = {
                     candidateDate.setDate(now.getDate() + dayOffset);
                     const dayOfWeek = candidateDate.getDay();
 
-                    if (dayOfWeek === 0 || dayOfWeek === 6) {
-                        const calendarEntry = getCalendarEntryForDate(candidateDate);
-                        if (calendarEntry) {
-                            if (calendarEntry.schedule) {
-                                const scheduleType = (calendarEntry && calendarEntry.schedule) || "regular";
-                                const schedule = bellScheduleTypes[scheduleType].periods;
-
-                                if (!schedule) {
-                                    dayOffset++;
-                                    continue;
-                                }
-
-                                for (const period of schedule) {
-                                    const [hourStart, minuteStart] = period.start.split(":").map(Number);
-                                    const bellDateStart = new Date(candidateDate);
-                                    bellDateStart.setHours(hourStart, minuteStart, 0, 0);
-
-                                    const [hourEnd, minuteEnd] = period.end.split(":").map(Number);
-                                    const bellDateEnd = new Date(candidateDate);
-                                    bellDateEnd.setHours(hourEnd, minuteEnd, 0, 0);
-
-                                    if (bellDateStart > now && bellDateStart-now < bellDateEnd-now) {
-                                        return bellDateStart;
-                                    }
-
-                                    if (bellDateEnd > now) {
-                                        return bellDateEnd;
-                                    }
-                                }
-
-                                dayOffset++;
-                            } else {
-                                dayOffset++;
-                                continue;
-                            }
-                        }
-                        dayOffset++;
-                        continue;
-                    }
-
                     const calendarEntry = getCalendarEntryForDate(candidateDate);
                     if (calendarEntry && !calendarEntry.schedule) {
                         dayOffset++;
                         continue;
                     }
 
-                    const scheduleType = (calendarEntry && calendarEntry.schedule) || "regular";
+                    let scheduleType = "regular";
+                    if (calendarEntry && calendarEntry.schedule) {
+                        scheduleType = calendarEntry.schedule;
+                    } else {
+                        if (dayOfWeek === 0 || dayOfWeek === 6) {
+                            dayOffset++;
+                            continue;
+                        }
+                    }
+
                     const schedule = bellScheduleTypes[scheduleType].periods;
 
                     if (!schedule) {
