@@ -243,7 +243,7 @@ input[type="color"]::-webkit-color-swatch {
     margin: 20px 30px 30px;
 }
 
-.item-button, .period-item, .add-period-button {
+.item-button, .period-item, .add-period-button, .add-event-button, .event-item {
     display: flex;
     flex-direction: row;
     text-align: center;
@@ -319,7 +319,7 @@ input[type="color"]::-webkit-color-swatch {
     width: 100%;
 }
 
-.settings-modal, .stations-modal, .add-station-modal, .create-bell-schedule-modal {
+.settings-modal, .stations-modal, .add-station-modal, .create-bell-schedule-modal, .edit-events-modal {
     display: none;
 }
 
@@ -617,7 +617,7 @@ input[type="color"]::-webkit-color-swatch {
     padding: 15px 30px 15px 40px;
 }
 
-.add-bell-schedule-modal-content {
+.add-bell-schedule-modal-content, .edit-events-modal-content {
     height: 90%;
 }
 
@@ -637,7 +637,7 @@ input[type="color"]::-webkit-color-swatch {
     width: 100%;
 }
 
-.add-bell-schedule-periods {
+.add-bell-schedule-periods, .events {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -649,33 +649,65 @@ input[type="color"]::-webkit-color-swatch {
     width: 25%;
 }
 
-.period-item {
+.period-item, .event-item {
     cursor: default;
 }
 
-.period-time {
+.period-time, .event-date {
     border: 2px solid var(--text-color);
     cursor: text;
     border-radius: 20px;
     padding: 5px 10px;
+    background-color: var(--secondary-color);
 }
 
-.period-time:focus {
+.period-time:focus, .event-date:focus {
     outline: 1px solid var(--text-color);
 }
 
-.delete-period-button {
+.delete-period-button, .delete-event-button {
     font-size: 30px;
     cursor: pointer;
     margin-left: 10px;
 }
 
-.add-period-button {
+.add-period-button, .add-event-button {
     justify-content: center;
     font-size: 30px;
     padding: 20px 10px;
 }
 
-.add-bell-schedule-button-group {
+.add-bell-schedule-button-group, .edit-events-button-group {
     margin-bottom: 20px;
+}
+
+.edit-events-modal-content {
+    width: 65%;
+}
+
+.events-bottom-buttons {
+    flex-direction: column;
+}
+
+.edit-events-button,.reset-events-button {
+    width: 70%;
+}
+
+.edit-events-body {
+    justify-content: space-between;
+}
+
+.events {
+    height: 100%;
+    padding: 1px 0px;
+}
+
+.event-text-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.event-schedule-dropdown, .event-name {
+    width: 100%;
 }

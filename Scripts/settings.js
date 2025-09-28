@@ -47,15 +47,6 @@ if (!theme) {
 
 
 
-
-
-
-
-
-
-
-
-
 const bellScheduleBody = document.querySelector(".bell-schedule-body");
 const newBellScheduleButton = document.querySelector(".add-bell-schedule-button");
 const resetBellSchedulesButton = document.querySelector(".reset-bell-schedules-button");
@@ -124,6 +115,10 @@ function loadBellSchedules() {
                     }
                 ]
             },
+            "no-school": {
+                "name": "No School",
+                "periods": []
+            },
             "shortened": {
                 "name": "Shortened Schedule",
                 "periods": [
@@ -161,10 +156,6 @@ function loadBellSchedules() {
                         "end": "13:15"
                     }
                 ]
-            },
-            "no-school": {
-                "name": "No School",
-                "periods": []
             }
         }
         localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
@@ -327,3 +318,88 @@ function CreateError(message) {
 }
 
 initializeBellSchedules();
+
+
+
+
+
+
+
+
+const editEventsModal = document.querySelector(".edit-events-modal");
+const editEventsCloseModal = document.querySelector(".edit-events-close-modal");
+const editEventsButton = document.querySelector(".edit-events-button");
+const resetEventsButton = document.querySelector(".reset-events-button");
+const addEventButton = document.querySelector(".add-event-button");
+const editEventsSaveButton = document.querySelector(".edit-events-save-button");
+const editEventsCancelButton = document.querySelector(".edit-events-cancel-button");
+const editEventsDeleteButtonElement = document.querySelector(".edit-events-delete-button");
+
+let calendar = [];
+
+function saveCalendar() {
+    localStorage.setItem("calendar", JSON.stringify(calendar));
+    updateStationDisplay();
+}
+
+function loadCalendar() {
+    let savedCalendar = localStorage.getItem("calendar");
+    if (savedCalendar) {
+        calendar = JSON.parse(savedCalendar);
+    } 
+}
+
+function generateEventID() {
+    return 'event-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+}
+
+editEventsCloseModal.addEventListener("click", () => {
+    resetEditEvents();
+});
+
+editEventsCancelButton.addEventListener("click", () => {
+    resetEditEvents();
+});
+
+editEventsSaveButton.addEventListener("click", () => {
+    resetEditEvents();
+});
+
+function resetEditEvents() {
+    editEventsModal.style.display = "none";
+}
+
+function addEvent(name = "New Event", start = null, end = null, schedule = 'regular', id = generateEventID()) {
+    
+}
+
+function editEventsDeleteButton(item) {
+    const removeBtn = item.querySelector('.delete-event-button');
+    removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+    });
+}
+
+editEventsButton.addEventListener("click", () => {
+    editEventsModal.style.display = "block";
+});
+
+resetEventsButton.addEventListener("click", () => {
+    resetCalendar();
+});
+
+addEventButton.addEventListener("click", () => {
+    addEvent();
+});
+
+function resetCalendar() {
+    localStorage.removeItem("calendar");
+    initializeCalendar();
+}
+
+function initializeCalendar() {
+    loadCalendar();
+}
+
+//initializeCalendar();

@@ -68,6 +68,10 @@ const modules = {
                                 }
                             ]
                         },
+                        "no-school": {
+                            "name": "No School",
+                            "periods": []
+                        },
                         "shortened": {
                             "name": "Shortened Schedule",
                             "periods": [
@@ -105,10 +109,6 @@ const modules = {
                                     "end": "13:15"
                                 }
                             ]
-                        },
-                        "no-school": {
-                            "name": "No School",
-                            "periods": []
                         }
                     }
                     localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
@@ -300,6 +300,10 @@ const modules = {
                                 }
                             ]
                         },
+                        "no-school": {
+                            "name": "No School",
+                            "periods": []
+                        },
                         "shortened": {
                             "name": "Shortened Schedule",
                             "periods": [
@@ -337,10 +341,6 @@ const modules = {
                                     "end": "13:15"
                                 }
                             ]
-                        },
-                        "no-school": {
-                            "name": "No School",
-                            "periods": []
                         }
                     }
                     localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
