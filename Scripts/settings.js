@@ -334,8 +334,10 @@ const addEventButton = document.querySelector(".add-event-button");
 const editEventsSaveButton = document.querySelector(".edit-events-save-button");
 const editEventsCancelButton = document.querySelector(".edit-events-cancel-button");
 const editEventsDeleteButtonElement = document.querySelector(".edit-events-delete-button");
+const eventsBody = document.querySelector(".events");
 
 let calendar = [];
+let calendarEvents = {};
 
 function saveCalendar() {
     localStorage.setItem("calendar", JSON.stringify(calendar));
@@ -362,26 +364,132 @@ editEventsCancelButton.addEventListener("click", () => {
 });
 
 editEventsSaveButton.addEventListener("click", () => {
+    calendarEvents = {};
+    editEventsModal.querySelectorAll(".event-item").forEach(element => {
+        const id = element.dataset.id;
+        const name = element.querySelector(".event-name").value;
+        const start = element.querySelector(".event-start-date").value;
+        const end = element.querySelector(".event-end-date").value;
+        const schedule = element.querySelector(".event-schedule-selected").dataset.value === 'no-school' ? null : element.querySelector(".event-schedule-selected").dataset.value;
+        calendarEvents[id] = {name, start, end, schedule};
+    });
+    calendar = Object.values(calendarEvents);
+    saveCalendar();
     resetEditEvents();
 });
 
 function resetEditEvents() {
     editEventsModal.style.display = "none";
-}
-
-function addEvent(name = "New Event", start = null, end = null, schedule = 'regular', id = generateEventID()) {
-    
-}
-
-function editEventsDeleteButton(item) {
-    const removeBtn = item.querySelector('.delete-event-button');
-    removeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        
+    calendarEvents = {};
+    editEventsModal.querySelectorAll(".event-item").forEach(element => {
+        element.remove();
     });
 }
 
+function addEvent(name = "New Event", start = null, end = null, schedule = 'regular', id = generateEventID()) {
+    const item = document.createElement("button");
+    item.classList.add("event-item");
+    item.dataset.id = id;
+
+    let today = new Date().toISOString().split('T')[0];
+    
+    const bellScheduleTypes = JSON.parse(localStorage.getItem("bellScheduleTypes"));
+    if (!bellScheduleTypes || !bellScheduleTypes[schedule]) {
+        schedule = 'regular';
+    }
+
+    dropdownOptions = '';
+
+    Object.keys(bellScheduleTypes).forEach((type) => {
+        let selected = '';
+        if (type === schedule) { 
+            selected = 'selected';
+        }
+        dropdownOptions += `<div class="dropdown-option ${selected}" data-value="${type}">${bellScheduleTypes[type].name}</div>`;
+    });
+
+    let dropdownZIndex = 33;
+    for (let i = eventsBody.querySelectorAll(".event-item").length-1; i >= 0; i--) {
+        const dropdownItem = eventsBody.querySelectorAll(".event-item")[i].querySelector('.custom-dropdown');
+        const selected = dropdownItem.querySelector('.event-schedule-selected');
+        const options = dropdownItem.querySelector('.dropdown-options');
+        selected.style.zIndex = dropdownZIndex + 1;
+        options.style.zIndex = dropdownZIndex;
+        dropdownZIndex += 2;
+    }
+
+    item.innerHTML = 
+        `<div class="event-text-inputs">
+                <input name="event-name" type="text" class="event-name add-item-name" value="${name}" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">
+                <div class="custom-dropdown event-schedule-dropdown">
+                    <div class="dropdown-selected event-schedule-selected" data-value="${schedule}" style="z-index: ${dropdownZIndex+3};">${bellScheduleTypes[schedule].name}</div>
+                    <div class="dropdown-options" style="z-index: ${dropdownZIndex+2};">
+                        ${dropdownOptions}
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-dates">
+                <input type="date" class="event-start-date event-date" min="${today}" value="${start ? start : today}">
+                -
+                <input type="date" class="event-end-date event-date" min="${today}" value="${end ? end : today}">
+            </div>
+            <i class="fa-solid fa-xmark delete-event-button"></i>`;
+    eventsBody.appendChild(item);
+
+    addDropdown(item.querySelector('.custom-dropdown'));
+    addEditEventsDeleteFunction(item);
+    addUpdateDates(item);
+    addUpdateDropdownZIndices(eventsBody.querySelectorAll(".event-item"));
+}
+
+function addEditEventsDeleteFunction(item) {
+    const removeBtn = item.querySelector('.delete-event-button');
+    removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        item.remove();
+    });
+}
+
+function addUpdateDates(item) {
+    const startDateInput = item.querySelector('.event-start-date');
+    const endDateInput = item.querySelector('.event-end-date');
+
+    const today = new Date().toISOString().split('T')[0];
+
+    startDateInput.addEventListener('blur', () => {
+        if (startDateInput.value < today) {
+            startDateInput.value = today;
+        }
+        endDateInput.min = startDateInput.value;
+        if (endDateInput.value < endDateInput.min) {
+            endDateInput.value = endDateInput.min;
+        }
+    });
+    endDateInput.addEventListener('blur', () => {
+        if (endDateInput.value < startDateInput.value) {
+            endDateInput.value = startDateInput.value;
+        }
+    });
+}
+
+function addUpdateDropdownZIndices(items) {
+    let dropdownZIndex = 30;
+    for (let i = items.length-1; i > 0; i--) {
+        const item = items[i];
+        const selected = item.querySelector('.event-schedule-selected');
+        const options = item.querySelector('.dropdown-options');
+        selected.style.zIndex = dropdownZIndex + 1;
+        options.style.zIndex = dropdownZIndex;
+        dropdownZIndex += 2;
+    }
+}
+
 editEventsButton.addEventListener("click", () => {
+    loadCalendar();
+    Object.keys(calendar).forEach(id => {
+        addEvent(calendar[id].name, calendar[id].start, calendar[id].end, calendar[id].schedule ? calendar[id].schedule : 'no-school');
+    });
     editEventsModal.style.display = "block";
 });
 
@@ -394,12 +502,6 @@ addEventButton.addEventListener("click", () => {
 });
 
 function resetCalendar() {
-    localStorage.removeItem("calendar");
-    initializeCalendar();
+    calendar = [];
+    saveCalendar();
 }
-
-function initializeCalendar() {
-    loadCalendar();
-}
-
-//initializeCalendar();
