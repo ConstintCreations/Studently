@@ -347,7 +347,8 @@ function saveCalendar() {
 function loadCalendar() {
     let savedCalendar = localStorage.getItem("calendar");
     if (savedCalendar) {
-        calendar = JSON.parse(savedCalendar);
+        const today = new Date().toISOString().split('T')[0];
+        calendar = JSON.parse(savedCalendar).filter(event => event.end >= today);
     } 
 }
 
