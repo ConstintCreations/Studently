@@ -210,7 +210,7 @@ createBellScheduleCancelButton.addEventListener("click", () => {
 function resetCreateBellSchedule() {
     createBellScheduleModal.style.display = "none";
     editingSchedule = null;
-    createBellScheduleTitle.textContent = "Add Schedule";
+    createBellScheduleTitle.innerHTML = `<i class="fa-solid fa-bell setting-icon"></i> Add Schedule`;
     createBellScheduleNameInput.value = "New Schedule";
     addBellSchedulePeriods.querySelectorAll(".period-item").forEach(element => {
         element.remove();
@@ -240,7 +240,7 @@ function addBellSchedule(name = "New Schedule", periods, id = generateID()) {
 function addBellScheduleEditFunctionality(item) {
     const editBtn = item.querySelector('.edit-bell-schedule');
     editBtn.addEventListener('click', (e) => {
-        createBellScheduleTitle.textContent = "Edit Schedule";
+        createBellScheduleTitle.innerHTML = `<i class="fa-solid fa-bell setting-icon"></i> Edit Schedule`;
         editingSchedule = item;
         createBellScheduleNameInput.value = bellScheduleTypes[item.dataset.id].name;
         bellScheduleTypes[item.dataset.id].periods.forEach((period) => {

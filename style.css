@@ -162,8 +162,10 @@ input[type="color"]::-webkit-color-swatch {
 
 .modal-body {
     overflow-y: auto;
-    display: grid;
-    place-items: center;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 20px 30px 30px;
 }
 
@@ -622,9 +624,12 @@ input[type="color"]::-webkit-color-swatch {
 .bell-schedule-body {
     padding-top: 10px;
     overflow-y: auto;
-    display: grid;
-    place-items: center;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 90%;
+    max-height: 30svh;
 }
 
 .add-item-key-centered {
