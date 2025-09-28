@@ -138,13 +138,14 @@ function addStation(name = "New Station", mainModule, secondaryModules, select =
     const newStationID = id || generateID();
     const button = document.createElement("button");
     button.classList.add("station-button");
+    button.classList.add("item-button");
     button.dataset.id = newStationID;
 
     button.innerHTML = `
-        <p class="station-name">${name}</p>
-        <div class="inner-station-button-group">
-            <i class="fa-solid fa-pen-to-square edit-station inner-station-button"></i>
-            <i class="fa-solid fa-trash-can remove-station inner-station-button"></i>
+        <p class="station-name item-name">${name}</p>
+        <div class="inner-station-button-group inner-item-button-group">
+            <i class="fa-solid fa-pen-to-square edit-station inner-station-button edit-item inner-item-button"></i>
+            <i class="fa-solid fa-trash-can remove-station inner-station-button remove-item inner-item-button"></i>
         </div>
     `;
 

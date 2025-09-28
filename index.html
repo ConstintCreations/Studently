@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="Styles/modules.css">
 </head>
 <body>
+    <!--<div class="error-popup" onclick="this.remove()"><i class="fa-solid fa-xmark close-popup"></i><p>Cannot Delete Regular Schedule</p></div>-->
     <div class="settings-modal">
         <div class="modal-background">
             <div class="modal-content">
@@ -58,10 +59,15 @@
                     
                     <div class="setting-section">
                         <p class="setting-title"><i class="fa-solid fa-bell setting-icon"></i>Bell Schedule</p>
-                        <div class="setting-item">
-                            
+                        <div class="bell-schedule-body">
+                                
                         </div>
-                        <button class="reset-button"></button>
+                        <div class="bell-schedule-bottom-buttons bottom-buttons">
+                            <button class="add-bell-schedule-button plus-button">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                            <button class="reset-button reset-bell-schedules-button"></button>
+                        </div>
                     </div>
                     <!-- Setting Section Template
 
@@ -82,6 +88,42 @@
             </div>
         </div>
     </div>
+    <div class="create-bell-schedule-modal">
+        <div class="modal-background">
+            <div class="add-bell-schedule-modal-content add-item-modal-content">
+                <i class="fa-solid fa-xmark close-modal create-bell-schedule-close-modal"></i>
+                <div class="modal-title add-bell-schedule-title">
+                    <i class="fa-solid fa-bell setting-icon"></i> Add Schedule
+                </div>
+                <div class="add-bell-schedule-body add-item-body">
+
+                    <div class="add-bell-schedule-item">
+                        <p class="add-item-key">
+                            Name:
+                        </p>
+                        <input name="add-schedule-name" type="text" class="add-bell-schedule-name add-item-name" value="New Schedule" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">
+                    </div>
+                    <div class="add-bell-schedule-item">
+                        <p class="add-item-key add-item-key-centered">
+                            Schedule:
+                        </p>
+                    </div>
+
+                    <div class="add-bell-schedule-periods">
+                        
+                            <button class="add-period-button">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+
+                    <div class="add-bell-schedule-button-group add-item-button-group">
+                        <button class="add-bell-schedule-save-button fancy-button">Save Schedule</button>
+                        <button class="add-bell-schedule-cancel-button fancy-button">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="stations-modal">
         <div class="modal-background">
             <div class="modal-content">
@@ -90,9 +132,9 @@
                     <ion-icon name="albums" class="stations-icon"></ion-icon> Stations
                 </div>
                 <div class="modal-body stations-body">
-                    
-                    <div class="station-bottom-buttons">
-                        <button class="new-station-button">
+
+                    <div class="station-bottom-buttons bottom-buttons">
+                        <button class="new-station-button plus-button">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                         <button class="reset-stations-button reset-button"></button>
@@ -104,18 +146,18 @@
     </div>
     <div class="add-station-modal">
         <div class="modal-background">
-            <div class="add-station-modal-content">
+            <div class="add-station-modal-content add-item-modal-content">
                 <i class="fa-solid fa-xmark close-modal add-station-close-modal"></i>
                 <div class="modal-title add-station-title">
                     <ion-icon name="albums" class="stations-icon"></ion-icon> Add Station
                 </div>
-                <div class="add-station-body">
+                <div class="add-station-body add-item-body">
 
                     <div class="add-station-item">
                         <p class="add-station-key">
                             Name:
                         </p>
-                        <input name="add-station-name" type="text" class="add-station-name" value="New Station" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">
+                        <input name="add-station-name" type="text" class="add-station-name add-item-name" value="New Station" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">
                     </div>
 
                     <div class="add-station-item">
@@ -153,7 +195,7 @@
                         </div>
 
                     </div>
-                    <div class="add-station-button-group">
+                    <div class="add-station-button-group add-item-button-group">
                         <button class="add-station-add-button fancy-button">Add Station</button>
                         <button class="add-station-edit-button fancy-button">Edit Station</button>
                         <button class="add-station-cancel-button fancy-button">Cancel</button>
