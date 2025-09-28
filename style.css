@@ -20,13 +20,17 @@
     color: var(--text-color);
     font-weight: 400;
     font-family: "Lexend", Helvetica, Arial, sans-serif;
-}
-
-.no-select {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.selectable {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
 }
 
 body {
