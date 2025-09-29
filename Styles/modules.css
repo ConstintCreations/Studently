@@ -71,3 +71,107 @@
 .bell-schedule .schedule-item.current {
     background-color: var(--primary-color);
 }
+
+.upcoming-events {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    padding-top: .2em;
+    padding-bottom: 0px;
+    gap: 0em;
+    overflow: hidden;
+}
+
+.upcoming-events .upcoming-events-title {
+    font-size: .4em;
+}
+
+.upcoming-events .upcoming-events-body {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 80%;
+    border-radius: 1em;
+    padding: .5em;
+    text-align: center;
+    font-size: .3em;
+    margin-bottom: .2em;
+}
+
+.upcoming-events .upcoming-event-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid var(--text-color);
+    border-radius: 50px;
+    font-size: .6em;
+    height: 4em;
+    margin-bottom: .5em;
+}
+
+.upcoming-events .upcoming-event-item.today {
+    background-color: var(--primary-color);
+}
+
+.upcoming-events .upcoming-event-dates {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--text-color);
+    color: var(--secondary-color);
+    border-radius: 50px;
+    height: 4em;
+    aspect-ratio: 1;
+    padding: .2em;
+}
+
+.upcoming-events .upcoming-event-date-start {
+    color: var(--secondary-color);
+    font-size: .8em;
+}
+
+.upcoming-events .upcoming-event-date-end {
+    color: var(--secondary-color);
+    font-size: .8em;
+}
+
+.upcoming-events .upcoming-event-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: .8em;
+    gap: .2em;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.upcoming-events .upcoming-event-name {
+    font-size: 1.5em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.upcoming-events .upcoming-event-schedule-type {
+    font-size: .8em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 2em;
+}
+
+.upcoming-events .upcoming-event-schedule-type-inner {
+    display: inline-block;
+    padding: 0px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

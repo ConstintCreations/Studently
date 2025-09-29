@@ -156,7 +156,7 @@ const modules = {
 
                     const schedule = bellScheduleTypes[scheduleType].periods;
 
-                    if (!schedule) {
+                    if (!schedule || schedule.length == 0) {
                         dayOffset++;
                         continue;
                     }
@@ -448,10 +448,183 @@ const modules = {
             }
         }
     },
-    "weather": {
+    "upcoming-events": {
         render: () =>
-            `weather`,
-        init: async (element) => {},
+            `<div class="upcoming-events-title"><i class="fa-solid fa-calendar"></i>Upcoming Events</div>
+            <div class="upcoming-events-body">
+            
+                <div class="upcoming-event-item">
+                    <div class="upcoming-event-dates">
+                        <div class="upcoming-event-date-start">10/05</div>
+                        -
+                        <div class="upcoming-event-date-end">10/26</div>
+                    </div>
+                    <div class="upcoming-event-text">
+                        <div class="upcoming-event-name">New Event</div>
+                        <div class="upcoming-event-schedule-type">(<div class="upcoming-event-schedule-type-inner">Regular Schedule</div>)</div>
+                    </div>
+                </div>
+            </div>`,
+        init: async (element) => {
+            const bodyElement = element.querySelector(".upcoming-events-body");
+
+            let calendar = [];
+            let bellScheduleTypes = {};
+
+            function loadDataJSON() {
+                const savedCalendar = localStorage.getItem("calendar");
+                if (savedCalendar) {
+                    calendar = JSON.parse(savedCalendar);
+                } else {
+                    localStorage.setItem("calendar", JSON.stringify(calendar));
+                }
+                const savedBellScheduleTypes = localStorage.getItem("bellScheduleTypes");
+                if (savedBellScheduleTypes) {
+                    bellScheduleTypes = JSON.parse(savedBellScheduleTypes);
+                } else {
+                    bellScheduleTypes = {
+                        "regular": {
+                            "name": "Regular Schedule",
+                            "periods": [
+                                {
+                                    "start": "08:00",
+                                    "end": "08:50"
+                                },
+                                {
+                                    "start": "08:55",
+                                    "end": "09:45"
+                                },
+                                {
+                                    "start": "09:50",
+                                    "end": "10:40"
+                                },
+                                {
+                                    "start": "10:45",
+                                    "end": "11:35"
+                                },
+                                {
+                                    "name": "Lunch",
+                                    "start": "11:40",
+                                    "end": "12:15"
+                                },
+                                {
+                                    "start": "12:20",
+                                    "end": "13:10"
+                                },
+                                {
+                                    "start": "13:15",
+                                    "end": "14:05"
+                                },
+                                {
+                                    "start": "14:10",
+                                    "end": "15:00"
+                                }
+                            ]
+                        },
+                        "no-school": {
+                            "name": "No School",
+                            "periods": []
+                        },
+                        "shortened": {
+                            "name": "Shortened Schedule",
+                            "periods": [
+                                {
+                                    "start": "08:00",
+                                    "end": "08:35"
+                                },
+                                {
+                                    "start": "08:40",
+                                    "end": "09:15"
+                                },
+                                {
+                                    "start": "09:20",
+                                    "end": "09:55"
+                                },
+                                {
+                                    "start": "10:00",
+                                    "end": "10:35"
+                                },
+                                {
+                                    "name": "Lunch",
+                                    "start": "10:40",
+                                    "end": "11:15"
+                                },
+                                {
+                                    "start": "11:20",
+                                    "end": "11:55"
+                                },
+                                {
+                                    "start": "12:00",
+                                    "end": "12:35"
+                                },
+                                {
+                                    "start": "12:40",
+                                    "end": "13:15"
+                                }
+                            ]
+                        }
+                    }
+                    localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
+                }
+            }
+            loadDataJSON();
+
+            calendar.sort((a, b) => {
+                const dateA = new Date(a.start);
+                const dateB = new Date(b.start);
+                return dateA - dateB;
+            });
+
+            const now = new Date();
+            const upcomingEvents = calendar.filter(entry => {
+                const [year, month, day] = entry.start.split('-').map(Number);
+                const end = new Date(year, month - 1, day);
+                end.setHours(23, 59, 59, 999);
+                return end >= now;
+            });
+
+            bodyElement.innerHTML = "";
+
+            if (upcomingEvents.length === 0) {
+                bodyElement.innerHTML = `<div class="no-events">No Upcoming Events</div>`;
+                return;
+            }
+
+            upcomingEvents.forEach((event) => {
+                let [year, month, day] = event.start.split('-').map(Number);
+                const startDate = new Date(year, month - 1, day);
+                [year, month, day] = event.end.split('-').map(Number);
+                const endDate = new Date(year, month - 1, day);
+                endDate.setHours(23, 59, 59, 999);
+                const isToday = startDate <= now && endDate >= now;
+                
+                let upcomingEventDates = `
+                    <div class="upcoming-event-dates">
+                        <div class="upcoming-event-date-start">${event.start.split("-").slice(1).join("/")}</div>
+                        -
+                        <div class="upcoming-event-date-end">${event.end.split("-").slice(1).join("/")}</div>
+                    </div>`;
+                if (event.start === event.end) {
+                    upcomingEventDates = `
+                    <div class="upcoming-event-dates">
+                        ${event.start.split("-").slice(1).join("/")}
+                    </div>`;
+                }
+
+                const eventElement = document.createElement("div");
+                eventElement.classList.add("upcoming-event-item");
+                eventElement.classList.toggle("today", isToday);
+                eventElement.innerHTML = `
+                    ${upcomingEventDates}
+                    <div class="upcoming-event-text">
+                        <div class="upcoming-event-name">${event.name}</div>
+                        <div class="upcoming-event-schedule-type">(<div class="upcoming-event-schedule-type-inner">${bellScheduleTypes[event.schedule]?.name ? bellScheduleTypes[event.schedule].name : bellScheduleTypes["no-school"].name}</div>)</div>
+                    </div>`;
+                
+                bodyElement.appendChild(eventElement);
+            });
+            
+        },
         delete: (element) => {},
     }
 };

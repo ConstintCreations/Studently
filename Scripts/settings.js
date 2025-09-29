@@ -70,8 +70,8 @@ let bellScheduleTypes;
 
 function saveBellSchedules() {
     localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
-    updateStationDisplay();
     updateCalendarAfterBellScheduleChange();
+    updateStationDisplay();
 }
 
 function loadBellSchedules() {
@@ -349,8 +349,14 @@ function saveCalendar() {
 function loadCalendar() {
     let savedCalendar = localStorage.getItem("calendar");
     if (savedCalendar) {
-        const today = new Date().toISOString().split('T')[0];
-        calendar = JSON.parse(savedCalendar).filter(event => event.end >= today);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        calendar = JSON.parse(savedCalendar).filter((event) => {
+            const [year, month, day] = event.end.split('-').map(Number);
+            const eventEndDate = new Date(year, month - 1, day);
+            eventEndDate.setHours(23, 59, 59, 999);
+            return eventEndDate >= today;
+        });
     } 
 }
 
@@ -394,7 +400,8 @@ function addEvent(name = "New Event", start = null, end = null, schedule = 'regu
     item.classList.add("event-item");
     item.dataset.id = id;
 
-    let today = new Date().toISOString().split('T')[0];
+    let today = new Date();
+    const todayString = today.getFullYear().toString() + "-" + (today.getMonth() + 1).toString().padStart(2, "0") + "-" + today.getDate().toString().padStart(2, "0");
     
     const bellScheduleTypes = JSON.parse(localStorage.getItem("bellScheduleTypes"));
     if (!bellScheduleTypes || !bellScheduleTypes[schedule]) {
@@ -433,9 +440,9 @@ function addEvent(name = "New Event", start = null, end = null, schedule = 'regu
             </div>
 
             <div class="event-dates">
-                <input type="date" class="event-start-date event-date" min="${today}" value="${start ? start : today}">
+                <input type="date" class="event-start-date event-date" min="${todayString}" value="${start ? start : todayString}">
                 -
-                <input type="date" class="event-end-date event-date" min="${today}" value="${end ? end : today}">
+                <input type="date" class="event-end-date event-date" min="${todayString}" value="${end ? end : todayString}">
             </div>
             <i class="fa-solid fa-xmark delete-event-button"></i>`;
     eventsBody.appendChild(item);
@@ -458,11 +465,12 @@ function addUpdateDates(item) {
     const startDateInput = item.querySelector('.event-start-date');
     const endDateInput = item.querySelector('.event-end-date');
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    const todayString = today.getFullYear().toString() + "-" + (today.getMonth() + 1).toString().padStart(2, "0") + "-" + today.getDate().toString().padStart(2, "0");
 
     startDateInput.addEventListener('blur', () => {
         if (startDateInput.value < today) {
-            startDateInput.value = today;
+            startDateInput.value = todayString;
         }
         endDateInput.min = startDateInput.value;
         if (endDateInput.value < endDateInput.min) {
