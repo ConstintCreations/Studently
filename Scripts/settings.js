@@ -328,11 +328,6 @@ initializeBellSchedules();
 
 
 
-
-
-
-
-
 const editEventsModal = document.querySelector(".edit-events-modal");
 const editEventsCloseModal = document.querySelector(".edit-events-close-modal");
 const editEventsButton = document.querySelector(".edit-events-button");

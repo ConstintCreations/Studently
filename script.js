@@ -17,5 +17,6 @@ document.addEventListener("keydown", (e) => {
         console.log(JSON.parse(localStorage.getItem("bellScheduleTypes")));
         console.log(JSON.parse(localStorage.getItem("calendar")));
         console.log(JSON.parse(localStorage.getItem("stations")));
+        console.log(JSON.parse(localStorage.getItem("toDoList")));
     }
 });

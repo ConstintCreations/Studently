@@ -643,26 +643,125 @@ const modules = {
         render: () =>
             `<div class="to-do-list-title"><i class="fa-solid fa-list-check"></i>To-Do List</div>
                 <div class="to-do-list-body">
-                    <div class="to-do-list-item">
-                        <i class="fa-solid fa-square-check to-do-list-check-box"></i> - Task 1: Finish Homework
+                    
+                    <div class="to-do-list-add">
+                        <i class="fa-solid fa-plus to-do-list-add-button"></i>
+                        <input type="text" class="to-do-list-add-text" placeholder="New Task" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">
                     </div>
-                    <div class="to-do-list-item">
-                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 2: Blah Blah Blah
-                    </div>
-                    <div class="to-do-list-item">
-                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 3: Take out the trash
-                    </div>
-                    <div class="to-do-list-item">
-                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 4: Other Stuff
-                    </div>
-                    <div class="to-do-list-item">
-                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 5: Something else
-                    </div>
-                    <i class="fa-solid fa-plus to-do-list-add-button"></i>
                 </div>
             </div>`,
-        init: async (element) => {},
-        delete: (element) => {},
+        init: async (element) => {
+            const bodyElement = element.querySelector(".to-do-list-body");
+            const addButton = element.querySelector(".to-do-list-add-button");
+            const addText = element.querySelector(".to-do-list-add-text");
+            const bottomAdd = element.querySelector(".to-do-list-add");
+
+            let timeouts = {};
+            element._to_do_list_timeouts = timeouts;
+            let todos = [];
+
+            function saveTodos() {
+                todos = [];
+                bodyElement.querySelectorAll(".to-do-list-item").forEach(item => {
+                    todos.push(item.querySelector(".to-do-list-item-input").textContent);
+                });
+                localStorage.setItem("toDoList", JSON.stringify(todos));
+            }
+
+            function loadTodos() {
+                const savedTodos = localStorage.getItem("toDoList");
+                if (savedTodos) {
+                    todos = JSON.parse(savedTodos);
+                    todos.forEach(todo => {
+                        addToDoItem(todo);
+                    });
+                }
+            }
+
+            function generateTimeoutID() {
+                return 'timeout-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+            }
+
+            bodyElement.querySelectorAll(".to-do-list-item").forEach(item => {
+                const itemID = item.dataset.id;
+                item.addEventListener("click", () => {
+                    item.classList.toggle("checked");
+                    if (item.classList.contains("checked")) {
+                        const timeout = setTimeout(() => {
+                            item.remove();
+                            saveTodos();
+                        }, 3000);
+                        timeouts[itemID] = timeout;
+                        element._to_do_list_timeouts = timeouts;
+                    } else {
+                        if (timeouts[itemID]) {
+                            clearTimeout(timeouts[itemID]);
+                            delete timeouts[itemID];
+                            element._to_do_list_timeouts = timeouts;
+                        }
+                    }
+                });
+            });
+
+            addButton.addEventListener("click", () => {
+                addToDoItem(addText.value.length > 0 ? addText.value : "New Task");
+            });
+
+            function addToDoItem(text = "New Task", id = generateTimeoutID()) {
+                const newItem = document.createElement("div");
+                newItem.classList.add("to-do-list-item");
+                newItem.dataset.id = id;
+                newItem.innerHTML = `
+                        <i class="fa-regular fa-square to-do-list-check-box"></i> - <p class="to-do-list-item-input"></p>
+                    `;
+                
+                const input = newItem.querySelector(".to-do-list-item-input");
+                input.textContent = text;
+
+                bodyElement.insertBefore(newItem, bottomAdd);
+
+                addText.value = "";
+                saveTodos();
+                newItem.addEventListener("click", addCheckedFunctionality(newItem));
+            }
+
+            function addCheckedFunctionality(item) {
+                const itemID = item.dataset.id;
+                const checkbox = item.querySelector(".to-do-list-check-box");
+                item.addEventListener("click", () => {
+                    item.classList.toggle("checked");
+                    if (item.classList.contains("checked")) {
+                        checkbox.classList.toggle("fa-square");
+                        checkbox.classList.toggle("fa-square-check");
+                        checkbox.classList.toggle("fa-regular");
+                        checkbox.classList.toggle("fa-solid");
+                        const timeout = setTimeout(() => {
+                            item.remove();
+                            saveTodos();
+                        }, 3000);
+                        timeouts[itemID] = timeout;
+                    } else {
+                        if (timeouts[itemID]) {    
+                            checkbox.classList.toggle("fa-square");
+                            checkbox.classList.toggle("fa-square-check");    
+                            checkbox.classList.toggle("fa-regular");
+                            checkbox.classList.toggle("fa-solid");
+                            clearTimeout(timeouts[itemID]);
+                            delete timeouts[itemID];
+                        }
+                    }
+                });
+            }
+
+            loadTodos();
+        },
+        delete: (element) => {
+            if (element._to_do_list_timeouts) {
+                element._to_do_list_timeouts.forEach((timeout) => {
+                    clearTimeout(timeout);
+                });
+            }
+        },
         /*update: (element) => {
         },*/
     }, "weather": {

@@ -209,11 +209,54 @@
 
 .to-do-list .to-do-list-item {
     cursor: pointer;
+    border: 2px solid var(--text-color);
+    border-radius: 50px;
+    font-size: .6em;
+    padding: .5em;
+}
+
+.to-do-list .to-do-list-item-input {
+    font-size: 1em;
+    width: 100%;
+    display: inline;
+}
+
+.to-do-list .to-do-list-add {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    gap: .3em;
+    padding: 0px .3em;
 }
 
 .to-do-list .to-do-list-add-button {
-    font-size: 1.2em;
+    font-size: 1em;
     cursor: pointer;
-    text-align: center;
-    align-self: center;
+}
+
+.to-do-list .to-do-list-add-text {
+    font-size: 0.6em;
+    width: 100%;
+    border: 2px solid var(--text-color);
+    border-radius: 50px;
+    background-color: var(--secondary-color);
+    padding: 0.5em;
+}
+
+.to-do-list .to-do-list-item.checked {
+    animation: toDoListItemAnimateOut 3s forwards;
+}
+
+.to-do-list .to-do-list-item.checked .to-do-list-item-input {
+    text-decoration: line-through;
+}
+
+@keyframes toDoListItemAnimateOut {
+    0%, 20% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
