@@ -234,6 +234,11 @@ const modules = {
                 clearInterval(element._bell_timer_interval);
             }
         },
+        /*update: (element) => {
+            modules["bell-timer"].delete(element);
+            console.log(element._bell_timer_interval);
+            modules["bell-timer"].init(element);
+        }*/
     },
     "bell-schedule": {
         render: () => 
@@ -396,7 +401,7 @@ const modules = {
                 for (let i = 0; i < items.length; i++) {
                     item = items[i];
                     const period = scheduleType.periods[i];
-
+                    
                     const [hourStart, minuteStart] = period.start.split(":").map(Number);
                     const [hourEnd, minuteEnd] = period.end.split(":").map(Number);
 
@@ -446,7 +451,11 @@ const modules = {
             if (element._bell_schedule_interval) {
                 clearInterval(element._bell_schedule_interval);
             }
-        }
+        },
+        /*update: (element) => {
+            modules["bell-schedule"].delete(element);
+            modules["bell-schedule"].init(element);
+        }*/
     },
     "upcoming-events": {
         render: () =>
@@ -626,5 +635,42 @@ const modules = {
             
         },
         delete: (element) => {},
+        /*update: (element) => {
+            modules["upcoming-events"].delete(element);
+            modules["upcoming-events"].init(element);
+        }*/
+    }, "to-do-list": {
+        render: () =>
+            `<div class="to-do-list-title"><i class="fa-solid fa-list-check"></i>To-Do List</div>
+                <div class="to-do-list-body">
+                    <div class="to-do-list-item">
+                        <i class="fa-solid fa-square-check to-do-list-check-box"></i> - Task 1: Finish Homework
+                    </div>
+                    <div class="to-do-list-item">
+                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 2: Blah Blah Blah
+                    </div>
+                    <div class="to-do-list-item">
+                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 3: Take out the trash
+                    </div>
+                    <div class="to-do-list-item">
+                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 4: Other Stuff
+                    </div>
+                    <div class="to-do-list-item">
+                        <i class="fa-regular fa-square to-do-list-check-box"></i> - Task 5: Something else
+                    </div>
+                    <i class="fa-solid fa-plus to-do-list-add-button"></i>
+                </div>
+            </div>`,
+        init: async (element) => {},
+        delete: (element) => {},
+        /*update: (element) => {
+        },*/
+    }, "weather": {
+        render: () =>
+            ``,
+        init: async (element) => {},
+        delete: (element) => {},
+        /*update: (element) => {
+        },*/
     }
 };

@@ -253,6 +253,24 @@ async function updateStationDisplay() {
     // Add Grabbing Logic to Reorder Modules
 }
 
+async function updateModulesData() {
+    /*const mainModule = stations[selectedStation.dataset.id].mainModule;
+    const secondaryModules = stations[selectedStation.dataset.id].secondaryModules;
+
+    if (mainModule.update) {
+        console.log("Updating main module");
+        mainModuleObject.update(main);
+    }
+
+    secondaryModules.forEach(module => {
+        const moduleObject = modules[module];
+        if (moduleObject.update) {
+            moduleObject.update(secondary);
+        }
+    });*/
+    updateStationDisplay();
+}
+
 function initializeStations() {
     loadStations();
     const stationIDs = Object.keys(stations);

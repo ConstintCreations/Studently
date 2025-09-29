@@ -69,9 +69,13 @@ let bellSchedulePeriods = {};
 let bellScheduleTypes;
 
 function saveBellSchedules() {
-    localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
-    updateCalendarAfterBellScheduleChange();
-    updateStationDisplay();
+    try {
+        localStorage.setItem("bellScheduleTypes", JSON.stringify(bellScheduleTypes));
+        updateCalendarAfterBellScheduleChange();
+        updateModulesData();
+    } catch (e) {
+        CreateError("Error saving bell schedules. Please try again.");
+    }
 }
 
 function loadBellSchedules() {
@@ -342,8 +346,12 @@ const eventsBody = document.querySelector(".events");
 let calendarEvents = {};
 
 function saveCalendar() {
-    localStorage.setItem("calendar", JSON.stringify(calendar));
-    updateStationDisplay();
+    try {
+        localStorage.setItem("calendar", JSON.stringify(calendar));
+        updateModulesData();
+    } catch (e) {
+        CreateError("Error saving calendar. Please try again.");
+    }
 }
 
 function loadCalendar() {

@@ -175,3 +175,45 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.to-do-list {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    padding-top: .2em;
+    padding-bottom: 0px;
+    gap: 0em;
+    overflow: hidden;
+}
+
+.to-do-list .to-do-list-title {
+    font-size: .5em;
+}
+
+.to-do-list .to-do-list-body {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    border-radius: 1em;
+    padding: .8em;
+    text-align: left;
+    font-size: .4em;
+    margin-bottom: .2em;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: .5em;
+}
+
+.to-do-list .to-do-list-item {
+    cursor: pointer;
+}
+
+.to-do-list .to-do-list-add-button {
+    font-size: 1.2em;
+    cursor: pointer;
+    text-align: center;
+    align-self: center;
+}
