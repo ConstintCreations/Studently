@@ -769,9 +769,9 @@ const modules = {
             `<i class="fa-solid fa-cloud weather-icon"></i>
             <div class="weather-temperature">--°F</div>
             <div class="weather-high-low">
-                <div class="weather-high">--°F</div>
-                -
                 <div class="weather-low">--°F</div>
+                -
+                <div class="weather-high">--°F</div>
             </div>
         `,
         init: async (element) => {
@@ -920,9 +920,9 @@ const modules = {
                     element.innerHTML = `<i class="fa-solid fa-cloud weather-icon"></i>
                         <div class="weather-temperature">--°F</div>
                         <div class="weather-high-low">
-                            <div class="weather-high">--°F</div>
-                            -
                             <div class="weather-low">--°F</div>
+                            -
+                            <div class="weather-high">--°F</div>
                         </div>`;
 
                     const tempWeatherIconElement = element.querySelector(".weather-icon");
