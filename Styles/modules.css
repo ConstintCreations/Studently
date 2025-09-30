@@ -244,6 +244,10 @@
     padding: 0.5em;
 }
 
+.to-do-list .to-do-list-add-text::placeholder {
+    color: var(--text-color);
+}
+
 .to-do-list .to-do-list-item.checked {
     animation: toDoListItemAnimateOut 3s forwards;
 }
@@ -259,4 +263,54 @@
     100% {
         opacity: 0;
     }
+}
+
+.weather {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2em;
+    padding: 0.5em;
+}
+
+.weather .weather-icon {
+    font-size: 1.5em;
+}
+
+.weather .weather-temperature {
+    font-size: 1em;
+}
+
+.weather .weather-high-low {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 0.5em;
+}
+
+.weather .weather-high, .weather-low {
+    font-size: 1em;
+}
+
+.weather .weather-error-error-icon {
+    font-size: 1em;
+}
+
+.weather .weather-error-message {
+    font-size: 0.5em;
+}
+
+.weather .weather-error-submessage {
+    font-size: 0.3em;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.weather .weather-error-refresh {
+    margin-top: 0.5em;
+    cursor: pointer;
+    font-size: 0.5em;
 }

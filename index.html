@@ -95,6 +95,31 @@
 
                     -->
 
+                    <div class="setting-section">
+                        <p class="setting-title"><i class="fa-solid fa-cloud setting-icon"></i>Weather</p>
+                        <div class="setting-item weather-item">
+                            <p class="setting-key">
+                                Latitude:
+                            </p>
+                            <input type="number" class="latitude-input weather-input" placeholder="eg: 40.7128" step="0.0001" min="-90" max="90">
+                        </div>
+                        <div class="setting-item weather-item">
+                            <p class="setting-key">
+                                Longitude:
+                            </p>
+                            <input type="number" class="longitude-input weather-input" placeholder="eg: 74.0060" step="0.0001" min="-180" max="180">
+                        </div>
+                        <div class="weather-bottom-buttons bottom-buttons">
+                            <button class="fancy-button save-weather-button">Save</button>
+                            <button class="reset-button reset-weather-button"></button>
+                        </div>
+                    </div>
+
+                    <div class="setting-section">
+                        <p class="setting-title"><i class="fa-solid fa-arrow-rotate-right setting-icon"></i>Reset All Data</p>
+                            <button class="reset-button reset-all-data-button"></button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -158,6 +183,25 @@
             </div>
         </div>
     </div>
+
+    <div class="confirm-reset-modal">
+        <div class="modal-background">
+            <div class="confirm-reset-modal-content add-item-modal-content">
+                <i class="fa-solid fa-xmark close-modal confirm-reset-close-modal"></i>
+                <div class="modal-title confirm-reset-title">
+                    <i class="fa-solid fa-arrow-rotate-right setting-icon"></i> Confirm Reset
+                </div>
+                <div class="confirm-reset-body">
+                    <p>Are you sure you want to reset all data? This action cannot be undone.</p>
+                    <div class="confirm-reset-button-group">
+                        <button class="reset-button confirm-reset-button"></button>
+                        <button class="cancel-reset-button fancy-button">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="stations-modal">
         <div class="modal-background">
             <div class="modal-content">

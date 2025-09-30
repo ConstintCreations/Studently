@@ -319,7 +319,7 @@ input[type="color"]::-webkit-color-swatch {
     width: 100%;
 }
 
-.settings-modal, .stations-modal, .add-station-modal, .create-bell-schedule-modal, .edit-events-modal {
+.settings-modal, .stations-modal, .add-station-modal, .create-bell-schedule-modal, .edit-events-modal, .confirm-reset-modal {
     display: none;
 }
 
@@ -710,4 +710,62 @@ input[type="color"]::-webkit-color-swatch {
 
 .event-schedule-dropdown, .event-name {
     width: 100%;
+}
+
+.save-weather-button {
+    margin-right: 40px;
+}
+
+.weather-input {
+    width: 60%;
+    font-size: 16px;
+    border: 2px solid var(--text-color);
+    border-radius: 20px;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.reset-all-data-button {
+    width: 140px; 
+}
+
+.reset-all-data-button::after {
+    content: "Reset All Data";
+}
+
+.confirm-reset-button {
+    width: 180px; 
+}
+
+.confirm-reset-button::after {
+    content: "Yes, Reset All Data";
+}
+
+.confirm-reset-body {
+    height: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 50px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.confirm-reset-button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 40px;
+}
+
+.confirm-reset-modal-content {
+    width: 40%;
+    height: max-content;
+}
+
+.confirm-reset-title {
+    margin-right: 80px;
 }

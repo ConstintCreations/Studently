@@ -766,9 +766,195 @@ const modules = {
         },*/
     }, "weather": {
         render: () =>
-            ``,
-        init: async (element) => {},
-        delete: (element) => {},
+            `<i class="fa-solid fa-cloud weather-icon"></i>
+            <div class="weather-temperature">--°F</div>
+            <div class="weather-high-low">
+                <div class="weather-high">--°F</div>
+                -
+                <div class="weather-low">--°F</div>
+            </div>
+        `,
+        init: async (element) => {
+            const weatherCodeIcons = {
+                0: "fa-sun",
+                1: "fa-sun",
+                2:  "fa-cloud-sun",
+                3: "fa-cloud",
+
+                45: "fa-smog",
+                48: "fa-smog",
+
+                51: "fa-cloud-rain",
+                53: "fa-cloud-rain",
+                55: "fa-cloud-rain",
+
+                56: "fa-cloud-showers-heavy",
+                57: "fa-cloud-rain",
+
+                61: "fa-cloud-rain",
+                63: "fa-cloud-rain",
+                65: "fa-cloud-showers-heavy",
+
+                66: "fa-cloud-rain",
+                67: "fa-cloud-showers-heavy",
+
+                71: "fa-snowflake",
+                73: "fa-snowflake",
+                75: "fa-snowflake",
+
+                77: "fa-snowflake",
+
+                80: "fa-cloud-rain",
+                81: "fa-cloud-rain",
+                82: "fa-cloud-showers-heavy",
+
+                85: "fa-snowflake",
+                86: "fa-snowflake",
+
+                95: "fa-cloud-bolt",
+                96: "fa-cloud-bolt",
+                99: "fa-cloud-bolt"
+            }
+
+            let weatherData = null;
+            let latitudeLongitude = null;
+
+            function saveWeatherData() {
+                if (weatherData) {
+                    let saveWeatherData = weatherData;
+                    saveWeatherData.push(Date.now());
+                    localStorage.setItem("weatherData", JSON.stringify(saveWeatherData));
+                }
+            }
+
+            function loadData(force = false) {
+                const savedLatitudeLongitude = localStorage.getItem("latitudeLongitude");
+                if (savedLatitudeLongitude) {
+                    latitudeLongitude = JSON.parse(savedLatitudeLongitude).slice(0, 2);
+                    localStorage.setItem("latitudeLongitude", JSON.stringify(latitudeLongitude));
+                    if (savedLatitudeLongitude[2]) {
+                        force = true;
+                    } 
+                    const savedWeatherData = localStorage.getItem("weatherData");
+                    if (savedWeatherData) {
+                        const parsedData = JSON.parse(savedWeatherData);
+                        if (parsedData.length === 5) {
+                            const timestamp = parsedData[4];
+                            const now = Date.now();
+                            if (now - timestamp < 900000 && !force) {
+                                weatherData = parsedData.slice(0, 4);
+                                interpretWeatherData();
+                            } else {
+                                fetchWeather(latitudeLongitude[0], latitudeLongitude[1]);
+                            }
+                        }
+                    } else {
+                        fetchWeather(latitudeLongitude[0], latitudeLongitude[1]);
+                    }
+                } else {
+                    errorFetchingData("No Location Set", true);
+                }
+            }
+
+            function errorFetchingData(message, showSettingsSubmessage = false) {
+                element.innerHTML = `
+                    <i class="fa-solid fa-triangle-exclamation weather-error-error-icon"></i>
+                    <div class="weather-error-message">${message}</div>
+                    ${showSettingsSubmessage ? `<div class="weather-error-submessage">Edit Location in Settings</div>` : ""}
+                    <i class="fa-solid fa-arrow-rotate-right weather-error-refresh"></i>
+                `;
+
+                if (showSettingsSubmessage) {
+                    const errorSubmessage = element.querySelector(".weather-error-submessage");
+
+                    errorSubmessage.addEventListener("click", () => {
+                        document.querySelector(".settings").click();
+                    });
+                }
+                
+                const refreshButton = element.querySelector(".weather-error-refresh");
+                refreshButton.addEventListener("click", () => {
+                    loadData(true);
+                });
+            }
+
+            function getWeatherIcon(code) {
+                return weatherCodeIcons[code] || "fa-question";
+            }
+
+            async function fetchWeather(latitude = null, longitude = null) {
+                if (latitude === null || longitude === null) {
+                    errorFetchingData("No Location Set", true);
+                } else {
+                    try {
+                        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min&current=weather_code,temperature_2m&timezone=auto&forecast_days=1&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`;
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            const data = await response.json();
+                            const currentWeatherCode = data.current.weather_code;
+                            const currentTemperature = data.current.temperature_2m;
+                            const dailyHigh = data.daily.temperature_2m_max[0];
+                            const dailyLow = data.daily.temperature_2m_min[0];
+                            
+                            weatherData = [currentWeatherCode, currentTemperature, dailyHigh, dailyLow];
+                            saveWeatherData();
+                            interpretWeatherData();
+                        } else {
+                            errorFetchingData("Error Fetching Weather Data");
+                        }
+                    } catch (error) {
+                        errorFetchingData("Unknown Error");
+                        console.error(error);
+                    }
+                }
+            }
+
+            function interpretWeatherData() {
+                if (!weatherData || weatherData.length < 4) {
+                    errorFetchingData("No Weather Data");
+                    return;
+                } else if (!weatherData.every(item => item !== null && item !== undefined)) {
+                    errorFetchingData("Incomplete Weather Data");
+                    return;
+                } else {
+                    element.innerHTML = `<i class="fa-solid fa-cloud weather-icon"></i>
+                        <div class="weather-temperature">--°F</div>
+                        <div class="weather-high-low">
+                            <div class="weather-high">--°F</div>
+                            -
+                            <div class="weather-low">--°F</div>
+                        </div>`;
+
+                    const tempWeatherIconElement = element.querySelector(".weather-icon");
+                    const weatherTemperatureElement = element.querySelector(".weather-temperature");
+                    const weatherHighElement = element.querySelector(".weather-high");
+                    const weatherLowElement = element.querySelector(".weather-low");
+
+                    const [currentWeatherCode, currentTemperature, dailyHigh, dailyLow] = weatherData;
+
+                    const weatherIconClass = getWeatherIcon(currentWeatherCode);
+                    tempWeatherIconElement.remove();
+                    const newWeatherIconElement = document.createElement("i");
+                    newWeatherIconElement.className = "fa-solid weather-icon " + weatherIconClass;
+                    element.insertBefore(newWeatherIconElement, weatherTemperatureElement);
+
+                    weatherTemperatureElement.textContent = currentTemperature + "°F";
+                    weatherHighElement.textContent = dailyHigh + "°F";
+                    weatherLowElement.textContent = dailyLow + "°F";
+                }
+            }
+
+            loadData();
+
+            element._weather_interval = setInterval(() => {
+                fetchWeather(longitude.latitude, longitude.longitude)
+            }, 900000);
+        },
+        delete: (element) => {
+            if (element._weather_interval) {
+                clearInterval(element._weather_interval);
+            }
+        },
         /*update: (element) => {
         },*/
     }

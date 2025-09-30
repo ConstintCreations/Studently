@@ -529,3 +529,90 @@ function updateCalendarAfterBellScheduleChange() {
     });
     saveCalendar();
 }
+
+const latitudeInput = document.querySelector(".latitude-input");
+const longitudeInput = document.querySelector(".longitude-input");
+
+latitudeInput.addEventListener("blur", () => {
+    let latitude = parseFloat(latitudeInput.value);
+    if (latitude < -90 || latitude > 90 || isNaN(latitude)) {
+        latitudeInput.value = "";
+        return;
+    }
+});
+
+longitudeInput.addEventListener("blur", () => {
+    let longitude = parseFloat(longitudeInput.value);
+    if (longitude < -180 || longitude > 180 || isNaN(longitude)) {
+        longitudeInput.value = "";
+        return;
+    }
+});
+
+const saveWeatherButton = document.querySelector(".save-weather-button");
+
+saveWeatherButton.addEventListener("click", () => {
+    let latitude = parseFloat(latitudeInput.value);
+    let longitude = parseFloat(longitudeInput.value);
+
+    if (isNaN(latitude) || isNaN(longitude)) {
+        if (isNaN(longitude) && isNaN(latitude)) {
+            CreateError("Please enter valid latitude and longitude values.");
+        } else if (isNaN(latitude)) {
+            CreateError("Please enter a valid latitude between -90 and 90.");
+        } else if (isNaN(longitude)) {
+            CreateError("Please enter a valid longitude between -180 and 180.");
+        }
+    } else {
+
+        let savedLatitudeLongitude = JSON.parse(localStorage.getItem("latitudeLongitude"));
+        if (savedLatitudeLongitude && savedLatitudeLongitude[0] === latitude && savedLatitudeLongitude[1] === longitude) {
+            
+        } else {
+            localStorage.setItem("latitudeLongitude", JSON.stringify([latitude, longitude, true]));
+            updateModulesData();
+        }
+    }
+});
+
+const resetWeatherButton = document.querySelector(".reset-weather-button");
+
+resetWeatherButton.addEventListener("click", () => {
+    localStorage.removeItem("latitudeLongitude");
+    localStorage.removeItem("weatherData");
+    latitudeInput.value = "";
+    longitudeInput.value = "";
+    updateModulesData();
+});
+
+latitudeInput.value = "";
+longitudeInput.value = "";
+let savedLatitudeLongitude = JSON.parse(localStorage.getItem("latitudeLongitude"));
+if (savedLatitudeLongitude) {
+    latitudeInput.value = savedLatitudeLongitude[0];
+    longitudeInput.value = savedLatitudeLongitude[1];
+}
+
+const resetAllDataButton = document.querySelector(".reset-all-data-button");
+const confirmResetModal = document.querySelector(".confirm-reset-modal");
+const confirmResetCloseModal = document.querySelector(".confirm-reset-close-modal");
+const confirmResetCancelButton = document.querySelector(".cancel-reset-button");
+const confirmResetConfirmButton = document.querySelector(".confirm-reset-button");
+
+
+resetAllDataButton.addEventListener("click", () => {
+    confirmResetModal.style.display = "block";
+});
+
+confirmResetCloseModal.addEventListener("click", () => {
+    confirmResetModal.style.display = "none";
+});
+
+confirmResetCancelButton.addEventListener("click", () => {
+    confirmResetModal.style.display = "none";
+});
+
+confirmResetConfirmButton.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.reload();
+});
